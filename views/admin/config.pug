@@ -1,0 +1,150 @@
+doctype html
+html
+	head
+		meta(http-equiv='Content-Type' content='text/html; charset=utf-8')
+		meta(name='viewport' content='width=device-width, initial-scale=1.0')
+		link(rel='icon' href='/public/favicon.ico')
+
+		link(href='https://fonts.googleapis.com/css?family=Montserrat:400,500|Nunito:300,400,600|Fira+Sans:400i,500i' rel='stylesheet')
+		link(href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet')
+		link(rel='stylesheet' href='/public/calculator/style/build/css/calculator.css')
+
+		script(src="https://code.jquery.com/jquery-3.3.1.min.js")
+		script(src="/public/calculator/admin_script.js")
+		
+		title Admin Panel &nbsp;&bullet;&nbsp; Aurailus Design
+		
+		meta(name='copyright' content='(c) 2019 - present Aurailus Design, All Rights Reserved.')
+		meta(name='description' content='Calculate your estimated taxes online!')
+		meta(name='keywords' content='Tax, Calculator, Residential Tax, Tax Calculator')
+		meta(name='author' content='Aurailus Design')
+		meta(name='robots' content='noindex,nofollow')
+		meta(name='theme-color' content='#333')
+		
+		//- Global site tag (gtag.js) - Google Analytics
+		script(async src='https://www.googletagmanager.com/gtag/js?id=UA-150100799-3')
+		script.
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'UA-150100799-3');
+			
+		script.
+			const DATA = JSON.parse(`!{JSON.stringify(calc)}`);
+	body#admin
+		aside
+			.logo
+			nav
+				div.active
+					a(href='./')
+						i.material-icons multiline_chart
+						| Calculations
+				div
+					a(href='/admin/theme')
+						i.material-icons palette
+						| Theme and Colors
+
+				hr
+
+				div
+					a(href='/admin/logout')
+						i.material-icons lock
+						| Log out
+				div
+					a(href='/')
+						i.material-icons launch
+						| View Site
+				
+				hr
+
+				div
+					a(href='/')
+						i.material-icons help_outline
+						| Support
+
+		main
+			.wrap
+				h2 Year
+				p The current year the values are for. This is displayed on the calculator so your users know if the data is up to date.
+				.col2
+					label(for='year') Current Year
+					input#year(type='number' value=calc.year)
+
+				h2 Insights
+				p These values are used to provide insights to your residents to help them compare their taxes to the average.
+				.col2
+					label(for='city_name') City Name
+					input#city_name(type='text' value=calc.city)
+					label(for='current_avg_assessment') Avg. Single Family Dwelling
+					input#current_avg_assessment(type='numeric' value=calc.insights.currentAvg)
+				.col2
+					label(for='assessed_value_increase') Average Assessed Value Increase
+					input#assessed_value_increase(type='decimal' value=calc.insights.increase)
+					label(for='previous_avg_assessment')  Avg. Single Family Dwelling
+					input#previous_avg_assessment(type='numeric' value=calc.insights.previousAvg)
+
+				h2 Tax Rates
+				p The current and previous year's tax rates in your municipality.
+				.col2
+					h2.no_margin #{calc.year}
+					each tax, ind in calc.taxes
+						input(id='tax_name_' + ind  type='hidden' value=tax.name)
+						label(for='tax_current_' + ind) #{tax.name}
+						input(id='tax_current_' + ind  type='decimal' value=tax.values.current)
+
+					button.tax_switch Move Current to Previous
+				.col2
+					h2.no_margin #{calc.year - 1}
+					each tax, ind in calc.taxes
+						label(for='tax_previous_' + ind) &nbsp;
+						input(id='tax_previous_' + ind  type='decimal' value=tax.values.previous)
+
+					p(style='margin-top: 34px; opacity: 0.6;')
+						strong Note:
+						| You will lose the previous
+						br
+						| year's current values.
+
+				h2 Flat Fees
+				p The current and previous year&apos;s flat fees in your municipality.
+				.col2
+					h2.no_margin #{calc.year}
+					each fee, ind in calc.fees
+						input(id='fee_name_' + ind  type='hidden' value=fee.name)
+						label(for='fee_current_' + ind) #{fee.name}
+						input(id='fee_current_' + ind type='numeric' value=fee.values.current)
+
+					button.fee_switch Move Current to Previous
+				.col2
+					h2.no_margin #{calc.year - 1}
+					each fee, ind in calc.fees
+						label(for='fee_previous_' + ind) &nbsp;
+						input(id='fee_previous_' + ind type='numeric' value=fee.values.previous)
+
+					p(style='margin-top: 34px; opacity: 0.6;')
+						strong Note:
+						|  You will lose the previous
+						br
+						| year&apos;s current values.
+
+				h2 Grants
+				p The available Homeowner's grants in your municipality.
+				.col2
+					label Name
+					each grant, ind in calc.grants
+						input(id='grant_name_' + ind type='text' value=grant.name)
+					p #{""}
+
+				.col2
+					label Value
+					each grant, ind in calc.grants
+						input(id='grant_value_' + ind  type='numeric' value=grant.value)
+					p #{""}
+
+		.save_options_wrap
+			.save_options
+				p
+					i.material-icons save
+					| You have unsaved changes.
+				button.undo(onclick='location.reload();') Roll Back
+				button.save Save

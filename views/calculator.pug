@@ -1,0 +1,119 @@
+doctype html
+html
+	head
+		meta(http-equiv='Content-Type' content='text/html; charset=utf-8')
+		meta(name='viewport' content='width=device-width, initial-scale=1.0')
+		link(rel='icon' href='/public/favicon.ico')
+
+		link(href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet')
+		link(href='https://fonts.googleapis.com/css?family=Roboto+Slab:300,400,500|Roboto:400,500' rel='stylesheet')
+		link(rel='stylesheet' href='/public/calculator/style/build/css/calculator.css')
+
+		script(src='https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/p5.min.js')
+		script(src='https://code.jquery.com/jquery-3.3.1.min.js')
+
+		title Residential Tax Calculator &nbsp;&bullet;&nbsp; Aurailus Design
+
+		meta(name='copyright' content='(c) 2019 - present Aurailus Design, All Rights Reserved.')
+		meta(name='description' content='Calculate your estimated taxes online!')
+		meta(name='keywords' content='Tax, Calculator, Residential Tax, Tax Calculator')
+		meta(name='author' content='Aurailus Design')
+		meta(name='robots' content='index nofollow')
+		meta(name='theme-color' content='#fff')
+
+		script.
+			const DATA = JSON.parse(`!{JSON.stringify(calc)}`) 
+		script(src='/public/calculator/calculator.js')
+
+		//- Global site tag (gtag.js) - Google Analytics
+		script(async src='https://www.googletagmanager.com/gtag/js?id=UA-150100799-3')
+		script.
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'UA-150100799-3', {
+				'page_title': "#{calc.identifier}",
+				'page_path': "#{calc.identifier}"
+			});
+	body#calculator(
+		class=calc.theme.backgroundTheme == "dark" ? "dark" : "light",
+		style=calc.theme.backgroundTheme == "trans" ? "background-color: transparent;" : "")
+		
+		#frame_wrap
+			.header_wrap(class=calc.theme.headerTheme)
+				
+				img.calc_image_header(src='/headers/header.png')
+				h1
+					if calc.title
+						strong(style='font-size: 0.7em; font-weight: 300;') #{calc.title}
+						br
+					if calc.theme.hasTitle 
+						span Calculate Your Residential Taxes #{"" /*Syntax Jank*/}
+
+				form
+					.inputs.prev_visible
+						.inputs_current
+							h1 #{calc.year} Details
+
+							label(for='assessed_value_current') Assessed Value
+							input#assessed_value_current(type='numeric')
+
+							label(for='homeowner_grant_current') Homeowner Grant
+							#homeowner_grant_current.input_select(tabindex='0')
+								each val, index in calc.grants
+									.item(val=index, class=calc.defaultGrant == index ? "selected" : "")
+										strong.slab-inl= "$" + val.value
+										|  - #{val.name}
+
+							.checkbox
+								label(for='lot_vacant_current') This lot is vacant
+								input#lot_vacant_current(type='checkbox')
+
+							label(for='tax_prepayments_current') Tax Prepayments
+							input#tax_prepayments_current(type='numeric' value='0')
+
+							button#calculate Calculate
+
+						.inputs_previous
+							h1 #{calc.year - 1} Details
+
+							label(for='assessed_value_previous') Assessed Value
+							input#assessed_value_previous(type='numeric')
+
+							label(for='homeowner_grant_previous') Homeowner Grant
+							#homeowner_grant_previous.input_select(tabindex='-1')
+								each val, index in calc.grants
+									.item(val=index, class=calc.defaultGrant == index ? "selected" : "")
+										strong.slab-inl= "$" + val.value
+										|  - #{val.name}
+
+							.checkbox
+								label(for='lot_vacant_previous') This lot is vacant
+								input#lot_vacant_previous(type='checkbox')
+
+							label(for='tax_prepayments_previous') Tax Prepayments
+							input#tax_prepayments_previous(type='numeric' value='0')
+
+						.checkbox
+							label(for='prev_year_enabled')
+								i.material-icons.inline history
+								strong(style='font-weight: 600;') Compare With Previous Year
+							input#prev_year_enabled.dark_background(type='checkbox' checked='')
+			
+			.results_wrap
+				p.calculate_info
+					| Click 
+					span Calculate
+					|  to show results.
+				.col.left
+				.col.right
+
+			footer(class=calc.theme.backgroundTheme == "trans" ? "transparent" : "")
+				p.promo
+					| This tool was developed by 
+					a(href='/' target='_blank') Aurailus Design.
+				p.disclaimer The information presented is an estimation only and actual tax levy could vary from the estimation.
+
+				button.secondary.inline#admin
+					i.material-icons vpn_key
+					| Admin Panel

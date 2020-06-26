@@ -1,0 +1,234 @@
+doctype html
+html
+	head
+		meta(http-equiv='Content-Type' content='text/html; charset=utf-8')
+		meta(name='viewport' content='width=device-width, initial-scale=1.0')
+		link(rel='icon' href='/public/favicon.ico')
+
+		link(href='https://fonts.googleapis.com/css?family=Montserrat:400,500|Nunito:300,400,600|Fira+Sans:400i,500i' rel='stylesheet')
+		link(href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet')
+		link(rel='stylesheet' href='/public/home/style/build/css/home.css')
+		
+		script(src='https://code.jquery.com/jquery-3.3.1.min.js')
+		script(src='/public/home/scripts.js')
+		
+		title Tax Calculator &nbsp;&bullet;&nbsp; Aurailus Design
+		
+		meta(name='copyright' content='(c) 2019 - present Aurailus Design, All Rights Reserved.')
+		meta(name='description' content='Calculate your estimated taxes online!')
+		meta(name='keywords' content='Tax, Calculator, Residential Tax, Tax Calculator')
+		meta(name='author' content='Aurailus Design')
+		meta(name='robots' content='index,follow')
+		meta(name='theme-color' content='#fff')
+		
+		//- Global site tag (gtag.js) - Google Analytics
+		script(async src='https://www.googletagmanager.com/gtag/js?id=UA-150100799-3')
+		script.
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'UA-150100799-3');
+	
+	body
+		header
+			.header-wrap
+				.blur-wrap
+					.inner-wrap
+						img.header-logo(src='/public/home/res/logo.svg' alt='Aurailus Design')
+						.nav-wrap
+							nav
+								a.link(href='#features') Features
+								a.link(href='#screenshots') Screenshots
+								a.link(href='#demo') Demo
+								a.link(href='#testimonials') Testimonials
+								a.link.quote(href='javascript:requestQuote();') Request a Quote
+		script.
+			new Header($("header"));
+		.hero-wrap
+			.hero-image
+			.hero-content-wrap
+				.hero-content
+					h2.hero-generic
+						| Treat your city&apos;s residents
+						br
+						strong(style='font-weight: 500; letter-spacing: 2px;') like people, not numbers.
+					br
+					h1.hero-cta-text They&apos;ll love you for it.
+					br
+		main
+			.about-wrapper
+				.blob.b1
+				.blob.b7
+				.blob.bs3
+				.about-background
+					.about-pic-grad
+						.about-pic
+					.about-content
+						h1 Taxes can be scary,
+						p
+							| We live in a world controlled by algebra and mathematics. To the average resident, the math that goes in to their municipal taxes can be 
+							strong esoteric and downright unreadable
+							| . Lack of understanding can make it easy to overreact, fearmonger, and worry about massive increases to taxes 
+							strong where none exist
+							| . The Tax Calculator solves that.
+						p
+							| Allow your residents to calculate their taxes, and compare their rates in an official, transparent way that will 
+							strong build trust and connection
+							|  between your city and your residents.
+
+			section#features.light(style='padding-top: 160px')
+				.content-wrap.large
+					.points-wrap
+						.blob.b1
+						.blob.bs3
+						h1.center(style='margin-bottom: 16px; margin-top: 0px;') Features
+						.point
+							.img_gradient
+								.img.seamless
+							.content
+								p.title Seamless
+								p Whether on a 40 inch television or a mobile phone screen, the calculator seamlessly adapts to the available real-estate.
+						.point
+							.img_gradient
+								.img.unique
+							.content
+								p.title Fast &amp; Secure
+								p The calculator is built from the ground up with modern languages and security standards to protect your residents.
+						.point
+							.img_gradient
+								.img.dynamic
+							.content
+								p.title Dynamic
+								p A powerful backend lets you change the colors, values, and more so that the calculator embeds flawlessly into your infastructure.
+						.point
+							.img_gradient
+								.img.fast
+							.content
+								p.title Blazing Fast
+								p Hosted on an enterprise grade Toronto web server, your website will run just as fast with the calculator as without.
+
+			section#screenshots.dark
+				.content-wrap.large
+					h1.center(style='margin-bottom: 48px; margin-top: -8px;') Screenshots
+					.work-wrap
+						.blob.b6
+						.blob.bs1
+						.blob.bs4
+						.work-preview(style="background-image: url('/public/home/res/work/comparison.jpg');")
+						.work-content
+							h2 Comparison
+							p The Tax Calculator is built to show comparisons between the current year&apos;s tax calculations and the last.
+							p With the current and previous year&apos;s assessed property values, a resident can compare the exact rates for which different services are collecting taxes.
+					.work-wrap.desktop
+						.blob.b4
+						.blob.bs2
+						.blob.bs5
+						.work-content(style='text-align: right')
+							h2 Results
+							p The Tax Calculator displays information in numerous different ways, working with the data given to give insights and information that may otherwise be missed
+							p The Tax Calculator can show increase / decrease in tax rates, percentage off of the average for assessed value and property tax, and more.
+						.work-preview(style="background-image: url('/public/home/res/work/graph.jpg');")
+					.work-wrap.mobile
+						.blob.b4
+						.blob.bs2
+						.blob.bs5
+						.work-preview(style="background-image: url('/public/home/res/work/graph.jpg');")
+						.work-content
+							h2 Results
+							p The Tax Calculator displays information in numerous different ways, working with the data given to give insights and information that may otherwise be missed
+							p The Tax Calculator can show increase / decrease in tax rates, percentage off of the average for assessed value and property tax, and more.
+					.work-wrap
+						.blob.b6
+						.blob.bs1
+						.blob.bs4
+						.work-preview(style="background-image: url('/public/home/res/work/theme.jpg');")
+						.work-content
+							h2 Theming
+							p The Tax Calculator can be completely customized to fit your city&apos;s identity.
+							p The header color, title, and background color can be changed in the admin panel to express a range of themes and emotions.
+				script.
+					new Perspective($(".work-preview"));
+
+			section#demo.dark.background
+				.content-wrap(style='max-width: 1100px;')
+					h1.center(style='margin-bottom: 48px; color: #fff') Demo
+					a.button.center(style='margin-bottom: 32px;' href='https://aurailus.tax-calculator.ca?hide_admin=true' target='_blank') View the demo here
+
+			section#testimonials.light
+				.content-wrap
+					h1.center(style='margin-bottom: 48px; margin-top: -8px;') Testimonials
+					.testimonial.cyan
+						.blob.bs1
+						.blob.bs4
+						.blob.b3
+						.blob.b6
+						.pic(style='background-image: url(/public/home/res/testimonials/shannon.png)')
+						p.name Shannon Miller
+						p.title RHIP, Powell River Hearing
+						.testimonial
+							p
+								| Nicole Collings created an informative and visually appealing website for Powell River Hearing. She guided me through the development stages in a very professional and knowledgeable manner. The website is easy to read and understand, and her expertise in web design helped to bring attention to the key messages that I want my viewers to focus on. 
+								strong She completed updates and revisions promptly to ensure that she was providing me with an up to date website that really targets the population I serve
+								| . I highly recommend Aurailus Design for your next website.
+					.testimonial-hr
+					.testimonial.pink
+						.blob.b4
+						.blob.b2
+						.blob.bs2
+						.blob.bs5
+						.pic(style='background-image: url(/public/home/res/testimonials/tim.png)')
+						p.name Tim Wall
+						p.title Owner, Avid Fitness
+						.testimonial
+							p
+								| Nicole Collings&apos; work was prompt and very responsive. While she had her own ideas of what she thought the website should look like, she listened as I made requests for changes, a truly remarkable trait. 
+								strong The website performs perfectly, without any issues.
+								|  I definitely recommend her services to others, and would use Aurailus Design again should the opportunity arise.
+			
+			section.dark.sell
+				.content-wrap
+					.blob.b6
+					.blob.bs1
+					.blob.bs4
+					h1.center(style='margin-bottom: 24px;') Request a Quote
+					p.center The annual rate varies based on the population of the city. A city with 10000 residents or less is $500 / year. Please request a quote to get an exact value.
+					div(style='height: 100px')
+					button.center(onclick='requestQuote();') Request a quote
+					div(style='height: 100px')
+					p.center
+						| Need more information before making a decision? Feel free to 
+						a(href='mailto:nicole@aurailus.design') contact us
+						| .
+			
+			footer
+				h2.center
+					| This tool was developed by 
+					a(href='https://aurailus.design?referrer=auricalc' target='_blank') Aurailus Design
+			#req
+
+		.modal
+			form(action='https://tax-calculator.ca/home/submit.php' method='POST')
+			script.
+				function requestQuote() {
+					let div = document.createElement("div");
+					div.innerHTML = `
+					<div class="modal open">
+					<form action="https://tax-calculator.ca/home/submit.php" method="POST">
+					<h3>Request a Quote</h3>
+					<label for="name">Name</label>
+					<input type="text" name="name" id="name" required>
+					<label for="email">Contact Email</label>
+					<input type="email" name="email" id="email" required>
+					<label for="text">Municipality</label>
+					<input type="text" name="city" id="city" required>
+					<label for="pop">Estimated Population</label>
+					<input type="number" name="pop" id="pop" required>
+					<label for="note">Message / Additional Notes</label>
+					<textarea name="note" id="note"></textarea>
+					<button>Request Quote</button>
+					</form>
+					</div>`;
+					document.getElementById("req").after(div);
+					document.getElementById("req").remove();
+					document.getElementById("name").focus();
+				}

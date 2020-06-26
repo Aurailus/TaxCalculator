@@ -1,0 +1,95 @@
+doctype html
+html
+  head
+    meta(http-equiv='Content-Type' content='text/html; charset=utf-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    link(rel='icon' href='/public/favicon.ico')
+
+    link(href='https://fonts.googleapis.com/css?family=Roboto+Slab:300,400,500|Roboto:400,500' rel='stylesheet')
+    
+    title Tax Calculator &nbsp;&bullet;&nbsp; Aurailus Design
+    
+    meta(name='copyright' content='(c) 2019 - present Aurailus Design, All Rights Reserved.')
+    meta(name='description' content='Calculate your estimated taxes online!')
+    meta(name='keywords' content='Tax, Calculator, Residential Tax, Tax Calculator')
+    meta(name='author' content='Aurailus Design')
+    meta(name='robots' content='noindex,nofollow')
+    meta(name='theme-color' content='#fff')
+    
+    //- Global site tag (gtag.js) - Google Analytics
+    script(async src='https://www.googletagmanager.com/gtag/js?id=UA-150100799-3')
+    script.
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-150100799-3');
+
+    style.
+      body, html {
+        margin: 0;
+        background-color: #222;
+        color: #fff;
+      }
+      .wrapper {
+        width: 700px;
+        margin: 0 auto;
+        padding: 100px 16px 32px 16px;
+      }
+      .inner {
+        background-color: #292929;
+        border-radius: 12px;
+        padding: 16px 24px;
+      }
+      h1 {
+        font-family: "Roboto Slab", serif;
+        text-align: center;
+        font-weight: 500;
+        margin-top: 0px;
+      }
+      h3 {
+        font-family: "Roboto Slab", serif;
+        text-align: center;
+        font-weight: 400;
+        font-size: 14px;
+        margin-top: 32px;
+      }
+      p {
+        font-family: "Roboto", sans-serif;
+        text-align: center;
+        font-weight: 400;
+        line-height: 1.5em;
+        opacity: 0.8;
+      }
+      img {
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        opacity: 0.4;
+        transition: opacity 0.4s;
+        margin-left: 32px;
+      }
+      img:hover {
+        opacity: 1;
+      }
+      a:first-of-type img {
+        margin-left: 140px;
+      }
+
+  body
+    .wrapper
+      .inner
+        h1 You're using an unsupported browser.
+        p.
+          We've determined you are using Internet Explorer 10 (or earlier.)<br>
+          Unfortunately, as this browser is 7 years old and Microsoft officially announced ending support for it, Internet Explorer 10 is not supported.
+
+        h3 - RECOMMENDED ALTERNATIVES -
+        
+        a(href='https://www.google.com/chrome/' title='Google Chrome')
+          img(src='/public/calculator/res/use-chrome.png' alt='Google Chrome')
+        
+        a(href='https://www.mozilla.org/en-CA/firefox/' title='Mozilla Firefox')
+          img(src='/public/calculator/res/use-firefox.png' alt='Mozilla Firefox')
+        
+        a(href='https://www.opera.com/' title='Opera')
+          img(src='/public/calculator/res/use-opera.png' alt='Opera')

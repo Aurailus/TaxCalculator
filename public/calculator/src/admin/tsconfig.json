@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"target": "es6",
+		"rootDirs": [
+			"./",
+		],
+		"typeRoots": [
+			"../@types/",
+		],
+		"outFile": "../../admin_script.js",
+		"alwaysStrict": true
+	},
+	"include": [
+		"./*",
+		"./**/*"
+	]
+}

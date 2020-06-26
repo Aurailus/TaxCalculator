@@ -1,0 +1,123 @@
+doctype html
+html
+	head
+		meta(http-equiv='Content-Type' content='text/html; charset=utf-8')
+		meta(name='viewport' content='width=device-width, initial-scale=1.0')
+		link(rel='icon' href='/public/favicon.ico')
+
+		link(href='https://fonts.googleapis.com/css?family=Montserrat:400,500|Nunito:300,400,600|Fira+Sans:400i,500i' rel='stylesheet')
+		link(href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet')
+		link(rel='stylesheet' href='/public/calculator/style/build/css/calculator.css')
+
+		script(src="https://code.jquery.com/jquery-3.3.1.min.js")
+		script(src="/public/calculator/admin_script.js")
+		
+		title Admin Panel &nbsp;&bullet;&nbsp; Aurailus Design
+		
+		meta(name='copyright' content='(c) 2019 - present Aurailus Design, All Rights Reserved.')
+		meta(name='description' content='Calculate your estimated taxes online!')
+		meta(name='keywords' content='Tax, Calculator, Residential Tax, Tax Calculator')
+		meta(name='author' content='Aurailus Design')
+		meta(name='robots' content='noindex,nofollow')
+		meta(name='theme-color' content='#333')
+		
+		//- Global site tag (gtag.js) - Google Analytics
+		script(async src='https://www.googletagmanager.com/gtag/js?id=UA-150100799-3')
+		script.
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'UA-150100799-3');
+			
+		script.
+			const DATA = JSON.parse(`!{JSON.stringify(calc)}`);
+
+	body#admin
+		aside
+			.logo
+			nav
+				div
+					a(href='./')
+						i.material-icons multiline_chart
+						| Calculations
+				div.active
+					a(href='/admin/theme')
+						i.material-icons palette
+						| Theme and Colors
+
+				hr
+
+				div
+					a(href='/admin/logout')
+						i.material-icons lock
+						| Log out
+				div
+					a(href='/')
+						i.material-icons launch
+						| View Site
+				
+				hr
+
+				div
+					a(href='/')
+						i.material-icons help_outline
+						| Support
+
+		main
+			.wrap
+				form(method="post" action="/admin/theme")
+					h2 Color and Theme
+					p Here you can customize the appearance of the calculator.
+					br
+						
+					label(for="header_theme") Header Color
+					#header_theme.color_picker_wrapper
+					br
+
+					label Background Color
+
+					input#background_dark.background_picker(type="radio" name="backgroundTheme" value="dark")
+					label.background_picker(for="background_dark" style="background-color: #171717; color:#ccc") Dark
+					input#background_light.background_picker(type="radio" name="backgroundTheme" value="light")
+					label.background_picker(for="background_light" style="background-color: #fff; color:#222") Light
+					input#background_transparent.background_picker(type="radio" name="backgroundTheme" value="trans")
+					label.background_picker(for="background_transparent" style="background-color: #999; color:#333") Transparent&nbsp;
+
+					p(style="max-width: 350px;") Note: The "Transparent" background color will inherit the color of the parent website.</p>
+					br
+
+					label(for="title") Title
+					input(style="max-width: 350px;" type="text" name="title" value=calc.title)
+					br
+			
+					label(for="show_title") Show "Calculate Your Residential Taxes"
+					input#show_title.dark_background.to_right(style="position: relative; top: -20px; left: 320px;"
+						type="checkbox" name="hasTitle" checked=calc.theme.hasTitle)
+					br
+					br
+						
+					label Header Image
+						.header_image_select
+					//- 		<?php
+					//- 			if ($row['has_header']) {
+					//- 				echo "<img class='header_image_preview' src='/headers/$CLIENT_ID.png'>";
+					//- 			}
+					//- 		?>
+					//- 		<div class="opts"> 
+					//- 			<?php
+					//- 				if ($row['has_header']) {
+					//- 					echo '<a class="button" href="./deleteImage.php">Delete Image</a>';
+					//- 				}
+					//- 			?>
+					//- 			<a class="button" href="./uploadImage.php">Upload new Image</a>
+					//- 		</div>
+					//- 	</div>
+					//- </div>
+			
+		.save_options_wrap
+			.save_options
+				p
+					i.material-icons save
+					| You have unsaved changes.
+				button.undo(onclick='location.reload();') Roll Back
+				button.save Save

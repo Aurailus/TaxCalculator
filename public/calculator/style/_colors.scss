@@ -1,0 +1,30 @@
+$header-color-orange:   linear-gradient(135deg, #ff7e22, #E53935);
+$header-color-red:		  linear-gradient(135deg, #ff6358, #ce083f);
+$header-color-magenta:  linear-gradient(135deg, #e91e63, #880e67);
+$header-color-lavender: linear-gradient(135deg, #e04fc8, #531f84);
+$header-color-indigo:		linear-gradient(135deg, #a65ee8, #381f84);
+$header-color-navy:			linear-gradient(135deg, #5593ef, #162890);
+$header-color-blue:     linear-gradient(135deg, #1e88e5, #3f51b5);
+$header-color-cyan:     linear-gradient(135deg, #31c1ba, #418bd8);
+$header-color-teal:			linear-gradient(135deg, #16c2ca, #00544c);
+$header-color-green:		linear-gradient(135deg, #7ee478, #146b1f);
+$header-color-lime:     linear-gradient(135deg, #a3da63, #4c7b19);
+$header-color-neon:			linear-gradient(135deg, #ffed93, #ffb307);
+$header-color-gold:			linear-gradient(135deg, #ffd65c, #ff5e00);
+$header-color-earth:		linear-gradient(135deg, #d29a86, #4c352d);
+$header-color-neutral:	linear-gradient(135deg, #90A4AE, #607D8B);
+$header-color-none:			transparent;
+
+$accent-dark: #3f51b5;
+$accent-light: #1e88e5;
+
+$error-accent: #e91e63;
+
+$text-accent: darken($accent-dark, 15%);
+
+$border-accent: mix($accent-dark, $accent-light, 50%);
+$border-active-accent: scale-color(lighten($border-accent, 10%), $saturation: 50%);
+$border-outline-accent: transparentize($border-active-accent, 0.8);
+
+$input-accent: $accent-light;
+$input-active-accent: lighten($accent-light, 10%);

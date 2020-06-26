@@ -1,0 +1,50 @@
+//Spinner CSS
+.sk-cube-grid {
+	position: absolute;
+	width: 40px;
+	height: 40px;
+	left: 50%;
+	top: 100px;
+	transform: translate(-50%, -50%);
+  opacity: 0;
+  z-index: 3;
+
+  &.visible {
+  	opacity: 1;
+  }
+
+  transition: opacity 0.2s;
+}
+
+.sk-cube-grid .sk-cube {
+  width: 33%;
+  height: 33%;
+  background-color: #666;
+  float: left;
+  animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
+  will-change: transform;
+}
+
+body.light .sk-cube-grid .sk-cube {
+  background-color: #aaa;
+}
+
+.sk-cube-grid .sk-cube1 { animation-delay: 0.2s; }
+.sk-cube-grid .sk-cube2 { animation-delay: 0.3s; }
+.sk-cube-grid .sk-cube3 { animation-delay: 0.4s; }
+.sk-cube-grid .sk-cube4 { animation-delay: 0.1s; }
+.sk-cube-grid .sk-cube5 { animation-delay: 0.2s; }
+.sk-cube-grid .sk-cube6 { animation-delay: 0.3s; }
+.sk-cube-grid .sk-cube7 { animation-delay: 0s;   }
+.sk-cube-grid .sk-cube8 { animation-delay: 0.1s; }
+.sk-cube-grid .sk-cube9 { animation-delay: 0.2s; }
+
+@keyframes sk-cubeGridScaleDelay {
+  0%, 70%, 100% {
+  	opacity: 1;
+    transform: scale3D(1, 1, 1);
+  } 35% {
+  	opacity: 0;
+    transform: scale3D(0, 0, 1);
+  } 
+}

@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"target": "es5",
+		"rootDirs": [
+			"./",
+		],
+		"typeRoots": [
+			"../@types/",
+		],
+		"outFile": "../../calculator.js",
+		"alwaysStrict": true
+	},
+	"include": [
+		"./*",
+		"./**/*"
+	]
+}

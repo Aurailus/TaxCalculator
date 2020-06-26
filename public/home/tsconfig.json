@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"target": "es5",
+		"rootDirs": [
+			"src/",
+		],
+		"typeRoots": [
+			"src/@types/",
+		],
+		"outFile": "scripts.js",
+		"alwaysStrict": true
+	},
+	"include": [
+		"src/*",
+		"src/**/*"
+	]
+}

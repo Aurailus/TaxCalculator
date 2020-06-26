@@ -1,0 +1,94 @@
+doctype html
+html
+	head
+		meta(http-equiv='Content-Type' content='text/html; charset=utf-8')
+		meta(name='viewport' content='width=device-width, initial-scale=1.0')
+		link(rel='icon' href='/public/favicon.ico')
+
+		link(href='https://fonts.googleapis.com/css?family=Montserrat:400,500|Nunito:300,400,600|Fira+Sans:400i,500i' rel='stylesheet')
+		link(href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet')
+		link(rel='stylesheet' href='/public/calculator/style/build/css/calculator.css')
+
+		script(src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js")
+
+		title Log In &nbsp;&bullet;&nbsp; Aurailus Design
+		
+		meta(name='copyright' content='(c) 2019 - present Aurailus Design, All Rights Reserved.')
+		meta(name='description' content='Calculate your estimated taxes online!')
+		meta(name='keywords' content='Tax, Calculator, Residential Tax, Tax Calculator')
+		meta(name='author' content='Aurailus Design')
+		meta(name='robots' content='noindex,nofollow')
+		meta(name='theme-color' content='#333')
+		
+		//- Global site tag (gtag.js) - Google Analytics
+		script(async src='https://www.googletagmanager.com/gtag/js?id=UA-150100799-3')
+		script.
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'UA-150100799-3');
+
+	body#admin
+		aside
+			.logo
+			nav
+				.active
+					a(href='./')
+						i.material-icons vpn_key
+						| Log in
+				div
+					a(href='/' target='_blank')
+						i.material-icons launch
+						| View Site
+				hr
+
+				div
+					a(href='/admin/support.php')
+						i.material-icons help_outline
+						| Support
+
+		main
+			form#login_form(action='' method='post')
+				h1.login_text Please Login to access the Admin Panel.
+
+				.login_wrap
+					.login_icon
+					input.dark(type="text" name="username" placeholder="Username")
+					input.dark(type="password" name="password" placeholder="Password")
+					button(type=submit) Login
+					p#login_error
+
+			script.
+				const form = document.getElementById("login_form");
+				const err = document.getElementById("login_error");
+		
+				let reqSent = false;
+				form.addEventListener('submit', (e) => {
+					if (!reqSent) {
+						reqSent = true;
+						err.innerText = "";
+
+						const xhr = new XMLHttpRequest();
+						xhr.open("POST", "/auth", true);
+						xhr.setRequestHeader('Content-Type', 'application/json');
+
+						xhr.onload = function() {
+							reqSent = false;
+							if (xhr.status != 200) {
+								err.innerText = this.responseText;
+							}
+							else {
+								Cookies.set('tkn', this.responseText, { expires: 3 });
+								location.reload();
+							}
+						}
+
+						xhr.send(JSON.stringify({ 
+							username: form.querySelector("input[name=username]").value, 
+							password: form.querySelector("input[name=password]").value 
+						}));
+					}
+
+					e.preventDefault();
+					return false;
+				});
