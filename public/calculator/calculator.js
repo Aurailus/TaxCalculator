@@ -20,10 +20,11 @@ var Calculator = /** @class */ (function () {
     Calculator.prototype.calculate = function () {
         var _this = this;
         var prev = this.inputs.previousYearEnabledElem.prop('checked');
+        var calculateAll = prev && this.inputs.prevLotVacancyElem.prop('checked') != this.inputs.currLotVacancyElem.prop('checked');
         var procPrev;
-        var procCurr = this.process(true, parseInt(this.inputs.currAssessedValueElem.val().toString()), !this.inputs.currLotVacancyElem.prop('checked'), parseInt(this.inputs.currHomeownerGrantElem.children('.item').attr('val')), parseInt(this.inputs.currTaxPrepaymentsElem.val().toString()));
+        var procCurr = this.process(true, parseInt(this.inputs.currAssessedValueElem.val().toString()), !this.inputs.currLotVacancyElem.prop('checked'), parseInt(this.inputs.currHomeownerGrantElem.children('.item').attr('val')), parseInt(this.inputs.currTaxPrepaymentsElem.val().toString()), calculateAll);
         if (prev) {
-            procPrev = this.process(false, parseInt(this.inputs.prevAssessedValueElem.val().toString()), !this.inputs.prevLotVacancyElem.prop('checked'), parseInt(this.inputs.prevHomeownerGrantElem.children('.item').attr('val')), parseInt(this.inputs.prevTaxPrepaymentsElem.val().toString()));
+            procPrev = this.process(false, parseInt(this.inputs.prevAssessedValueElem.val().toString()), !this.inputs.prevLotVacancyElem.prop('checked'), parseInt(this.inputs.prevHomeownerGrantElem.children('.item').attr('val')), parseInt(this.inputs.prevTaxPrepaymentsElem.val().toString()), calculateAll);
         }
         //Sort by Value
         procCurr.taxPayout.sort(function (a, b) { return a.value - b.value; });
@@ -110,7 +111,7 @@ var Calculator = /** @class */ (function () {
         return false;
     };
     //Return a table of calculated tax values.
-    Calculator.prototype.process = function (current, assessed, occupied, grantInd, prepayments) {
+    Calculator.prototype.process = function (current, assessed, occupied, grantInd, prepayments, calculateAll) {
         var taxes = [];
         var fees = [];
         var sum = 0;
@@ -122,9 +123,14 @@ var Calculator = /** @class */ (function () {
         }
         for (var _b = 0, _c = DATA.fees; _b < _c.length; _b++) {
             var fee = _c[_b];
-            if (fee.requiresOccupancyState !== undefined && fee.requiresOccupancyState != occupied)
-                continue;
-            var value = (current ? fee.values.current : fee.values.previous);
+            var value = void 0;
+            if (fee.requiresOccupancyState !== undefined && fee.requiresOccupancyState != occupied) {
+                if (!calculateAll)
+                    continue;
+                value = 0;
+            }
+            else
+                value = (current ? fee.values.current : fee.values.previous);
             fees.push({ name: fee.name, value: value });
             sum += value;
         }
@@ -559,8 +565,8 @@ var ResultBarChart = /** @class */ (function () {
         // if (p.mouseX > 0 && p.mouseY > 0 && p.mouseX < p.width && p.mouseY < p.height) p.redraw();
     };
     ResultBarChart.prototype.draw = function (p, w, h) {
-        var colorsLight = ["#c73092", "#b12bba", "#8139c0", "#5239c0", "#3447bd", "#296cdb", "#1c91f7", "#00b8d0", "#00a091"];
-        var colorsDark = ["#9c196d", "#911f99", "#6b2aa3", "#3d289a", "#273a9e", "#224ac2", "#0b6fdf", "#009dab", "#008377"];
+        var colorsLight = ["#c73044", "#c73092", "#b12bba", "#8139c0", "#5239c0", "#3447bd", "#296cdb", "#1c91f7", "#00b8d0", "#00a091"];
+        var colorsDark = ["#ad2335", "#9c196d", "#911f99", "#6b2aa3", "#3d289a", "#273a9e", "#224ac2", "#0b6fdf", "#009dab", "#008377"];
         p.background($("body").hasClass('light') ? "#fff" : "#333");
         var maxPercent = 0;
         for (var s = (this.procPrev ? 1 : 0); s >= 0; s--) {
@@ -577,7 +583,7 @@ var ResultBarChart = /** @class */ (function () {
         for (var i = 0; i < this.dataCurr.length; i++) {
             for (var s = 0; s <= (this.procPrev ? 1 : 0); s++) {
                 var table = (s == 0 ? this.dataCurr : this.dataPrev);
-                var color = ((s == 0) ? colorsLight : colorsDark)[8 - (i % 9)];
+                var color = ((s == 0) ? colorsLight : colorsDark)[9 - (i % 10)];
                 var data = table[table.length - 1 - i];
                 var barWidth = Math.max((w - barLeft - 20) * (data.amount / maxPercent), 3);
                 var barPos = y + (s == 1 ? barHeight + betweenBarSpacing : 0);
@@ -703,7 +709,7 @@ var ResultInsights = /** @class */ (function () {
                 lines += "<p><i class=\"material-icons\">" + this.level + "</i> Your assessed value change is average.</p>";
             }
         }
-        lines += "<p><i class=\"material-icons\">" + this.level + "</i> The average \n\t\t\tresidential property assessed value increase in " + DATA.title + " is <span class='slab'>" + DATA.insights.increase + "%</slab></p>";
+        lines += "<p><i class=\"material-icons\">" + this.level + "</i> The average \n\t\t\tresidential property assessed value increase in " + DATA.city + " is <span class='slab'>" + DATA.insights.increase + "%</slab></p>";
         lines += "<p><i class=\"material-icons\">" + this.info + "</i> The average Single Family Dwelling assessment in " + DATA.year + " was <span class='slab'><span class='slab'>" + formatNum(DATA.insights.currentAvg, 0, "$") + "</slab></span>.</p>";
         lines += "<p><i class=\"material-icons\">" + this.info + "</i> The average Single Family Dwelling assessment in " + (DATA.year - 1) + " was <span class='slab'><span class='slab'>" + formatNum(DATA.insights.previousAvg, 0, "$") + "</slab></span>.</p>";
         this.elem = $("\n\t\t\t<div class='result_pane insights'>\n\t\t\t\t<h2 class=\"title\"><i class=\"material-icons\">bubble_chart</i> Tax Insights</h2>\n\t\t\t\t<div class=\"inner\">\n\t\t\t\t\t" + lines + "\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t");
@@ -720,10 +726,10 @@ var ResultPieChart = /** @class */ (function () {
         var max = table.total;
         var values = [];
         var count = 0;
-        var maxCount = 8;
+        var maxCount = 10;
         for (var i = table.allPayouts.length - 1; i >= 0; i--) {
             var payout = table.allPayouts[i];
-            if (++count < maxCount) {
+            if (++count < maxCount || table.allPayouts.length == maxCount) {
                 values.push({
                     name: payout.name,
                     amount: payout.value,
@@ -830,7 +836,7 @@ var ResultPieChart = /** @class */ (function () {
                         active = true;
                         activeNum = i;
                     }
-                    var colorInd = mod(i - table.length + 9, 9);
+                    var colorInd = mod(i - table.length + 10, 10);
                     p.fill((active ? colorsActive[colorInd] : colorsFill[colorInd]));
                     p.stroke($("body").hasClass('light') ? (active ? colorsActive[colorInd] : colorsFill[colorInd]) : (active ? "#fff" : colorsFill[colorInd]));
                 }
@@ -870,10 +876,10 @@ var ResultPieChart = /** @class */ (function () {
         return activeNum;
     };
     ResultPieChart.prototype.draw = function (p, w, h) {
-        var colorsLightActive = ["#e838aa", "#c93bd4", "#964ad9", "#5239c0", "#4b5dcd", "#3f7bdf", "#3ca2f8", "#37d7e5", "#4ac6bc"];
-        var colorsLight = ["#c73092", "#b12bba", "#8139c0", "#5239c0", "#3447bd", "#296cdb", "#1c91f7", "#00b8d0", "#00a091"];
-        var colorsDarkActive = ["#b52281", "#a224ab", "#752eb3", "#422ca4", "#3447bd", "#296cdb", "#2a98f7", "#19c6d9", "#21b1a4"];
-        var colorsDark = ["#9c196d", "#911f99", "#6b2aa3", "#3d289a", "#273a9e", "#224ac2", "#0b6fdf", "#009dab", "#008377"];
+        var colorsLightActive = ["#de3e53", "#e838aa", "#c93bd4", "#964ad9", "#5239c0", "#4b5dcd", "#3f7bdf", "#3ca2f8", "#37d7e5", "#4ac6bc"];
+        var colorsLight = ["#c73044", "#c73092", "#b12bba", "#8139c0", "#5239c0", "#3447bd", "#296cdb", "#1c91f7", "#00b8d0", "#00a091"];
+        var colorsDarkActive = ["#bd283b", "#b52281", "#a224ab", "#752eb3", "#422ca4", "#3447bd", "#296cdb", "#2a98f7", "#19c6d9", "#21b1a4"];
+        var colorsDark = ["#ad2335", "#9c196d", "#911f99", "#6b2aa3", "#3d289a", "#273a9e", "#224ac2", "#0b6fdf", "#009dab", "#008377"];
         p.background($("body").hasClass('light') ? "#fff" : "#333");
         var circleSize = (w - 32);
         var x = w / 2;
@@ -918,7 +924,7 @@ var ResultPieChart = /** @class */ (function () {
             var x_1 = 0;
             if (prev)
                 x_1 += 240;
-            p.fill(colorsLight[mod(i - this.dataCurr.length + 9, 9)]);
+            p.fill(colorsLight[mod(i - this.dataCurr.length + 10, 10)]);
             p.stroke($("body").hasClass('light') ? "#fff" : "#fff");
             p.strokeWeight(2);
             p.ellipse(mw, mh - 7, 16);
@@ -967,7 +973,7 @@ var ResultPieChart = /** @class */ (function () {
             p.text((active >= this.dataCurr.length) ? (DATA.year - 1).toString() : DATA.year.toString(), x, y - 4);
             p.textSize(22);
             p.fill($("body").hasClass('light') ? "#000" : "#fff");
-            p.text(formatNum((active >= 6 ? this.totalPrev : this.totalCurr), 0, "$"), x, y + 26);
+            p.text(formatNum((active >= this.dataCurr.length ? this.totalPrev : this.totalCurr), 0, "$"), x, y + 26);
             p.textAlign(p.LEFT);
         }
     };

@@ -39,6 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var path_1 = __importDefault(require("path"));
 var crypto_1 = __importDefault(require("crypto"));
 var bcrypt_1 = __importDefault(require("bcrypt"));
 var mongodb_1 = require("mongodb");
@@ -49,7 +50,7 @@ var Database = /** @class */ (function () {
     }
     Database.prototype.init = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var url, dbName, calc;
+            var url, dbName;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -61,27 +62,160 @@ var Database = /** @class */ (function () {
                         _a.sent();
                         console.log("Successfully connected to MongoDB");
                         this.db = this.client.db(dbName);
-                        // // Temp: Delete all users.
-                        return [4 /*yield*/, this.db.collection('accounts').deleteMany({})];
-                    case 2:
-                        // // Temp: Delete all users.
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+    * Get Calculator data from the database using
+    * a subdomain as an identifier.
+    *
+    * @param {string} subdomain - The calculator identifier.
+    */
+    Database.prototype.getCalculator = function (subdomain) {
+        return __awaiter(this, void 0, void 0, function () {
+            var calculators, calculatorObj;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        calculators = this.db.collection('calculators');
+                        return [4 /*yield*/, calculators.findOne({ identifier: subdomain })];
+                    case 1:
+                        calculatorObj = _a.sent();
+                        if (!calculatorObj)
+                            throw "This calculator does not exist.";
+                        return [2 /*return*/, calculatorObj];
+                }
+            });
+        });
+    };
+    /**
+    * Updates a calculator using with specified data.
+    *
+    * @param {string} subdomain - The calculator identifier.
+    * @param {any} data - The Update object.
+    */
+    Database.prototype.updateCalculator = function (subdomain, update) {
+        return __awaiter(this, void 0, void 0, function () {
+            var calculators;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        calculators = this.db.collection('calculators');
+                        return [4 /*yield*/, calculators.updateOne({ identifier: subdomain }, update)];
+                    case 1:
                         _a.sent();
-                        return [4 /*yield*/, this.db.collection('calculators').deleteMany({})];
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+    * Sets a header image to a file.
+    * Throws if the file is somehow invalid.
+    *
+    * @param {string} subdomain - The calculator identifier.
+    * @param {UploadedFile} file - The image file.
+    */
+    Database.prototype.setHeader = function (subdomain, file) {
+        return __awaiter(this, void 0, void 0, function () {
+            var accountObj, ext;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getAccount(subdomain)];
+                    case 1:
+                        accountObj = _a.sent();
+                        if (file.mimetype != "image/png" && file.mimetype != "image/jpeg")
+                            throw "Uploaded file must be a PNG or JPEG file.";
+                        if (file.size > 2 * 1024 * 1024 || file.truncated)
+                            throw "Uploaded file must be < 2MB.";
+                        ext = file.mimetype == "image/png" ? ".png" : ".jpg";
+                        return [4 /*yield*/, file.mv(path_1.default.join(__dirname, "/../public/headers/" + subdomain + ext))];
+                    case 2:
+                        _a.sent();
+                        return [4 /*yield*/, this.db.collection('calculators').updateOne({ identifier: subdomain }, { $set: { "theme.hasHeader": ext } })];
                     case 3:
                         _a.sent();
-                        return [4 /*yield*/, this.createAccount("powellriver", "Powell River", "")];
-                    case 4:
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+    * Removes a header from an account.
+    *
+    * @param {string} subdomain - The calculator identifier.
+    */
+    Database.prototype.unlinkHeader = function (subdomain) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.db.collection('calculators').updateOne({ identifier: subdomain }, { $set: { "theme.hasHeader": "" } })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+    * Get a User database object from a user identifier.
+    * Throws if the user doesn't exist.
+    *
+    * @param {string} identifier - The user identifier.
+    */
+    Database.prototype.getAccount = function (identifier) {
+        return __awaiter(this, void 0, void 0, function () {
+            var accounts, accountObj;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        accounts = this.db.collection('accounts');
+                        return [4 /*yield*/, accounts.findOne({ identifier: identifier })];
+                    case 1:
+                        accountObj = _a.sent();
+                        if (!accountObj)
+                            throw "This user no longer exists.";
+                        return [2 /*return*/, accountObj];
+                }
+            });
+        });
+    };
+    /**
+    * Create a user in the database from a user string, a name, and a password.
+    * Throws if another user with the same user string already exists.
+    *
+    * @param {string} identifier - The user identifier in the form of a subdomain.
+    * @param {string} name - A username that the user will be referred to as.
+    * @param {string} password - A password for the user account.
+    */
+    Database.prototype.createAccount = function (identifier, name, password) {
+        return __awaiter(this, void 0, void 0, function () {
+            var accounts, pass, calc;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        accounts = this.db.collection('accounts');
+                        return [4 /*yield*/, accounts.findOne({ identifier: identifier })];
+                    case 1:
+                        if ((_a.sent()) != null)
+                            throw "A user with this email address already exists.";
+                        return [4 /*yield*/, bcrypt_1.default.hash(password, 10)];
+                    case 2:
+                        pass = _a.sent();
+                        return [4 /*yield*/, accounts.insertOne({ name: name, identifier: identifier, pass: pass })];
+                    case 3:
                         _a.sent();
                         calc = {
-                            identifier: "powellriver",
-                            city: "Powell River",
-                            title: "Powell River",
+                            identifier: identifier,
+                            city: name,
+                            title: name,
                             year: 2020,
                             theme: {
-                                showTitle: false,
-                                hasHeader: true,
+                                showTitle: true,
+                                hasHeader: "",
                                 headerTheme: "navy",
-                                accentTheme: "navy",
                                 backgroundTheme: "dark"
                             },
                             taxes: [{
@@ -137,7 +271,7 @@ var Database = /** @class */ (function () {
                             }
                         };
                         return [4 /*yield*/, this.db.collection('calculators').insertOne(calc)];
-                    case 5:
+                    case 4:
                         _a.sent();
                         return [2 /*return*/];
                 }
@@ -145,77 +279,61 @@ var Database = /** @class */ (function () {
         });
     };
     /**
-    * Get Calculator data from the database using
-    * a subdomain as an identifier.
+    * Changes an account's password to the one specified.
     *
-    * @param {string} subdomain - The calculator identifier.
+    * @param {string} identifier - The identifier.
+    * @param {string} password - The new password.
     */
-    Database.prototype.getCalculator = function (subdomain) {
-        return __awaiter(this, void 0, void 0, function () {
-            var calculators, calculatorObj;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        calculators = this.db.collection('calculators');
-                        return [4 /*yield*/, calculators.findOne({ identifier: subdomain })];
-                    case 1:
-                        calculatorObj = _a.sent();
-                        if (!calculatorObj)
-                            throw "This calculator does not exist.";
-                        return [2 /*return*/, calculatorObj];
-                }
-            });
-        });
-    };
-    /**
-    * Get a User database object from a user identifier.
-    * Throws if the user doesn't exist.
-    *
-    * @param {string} identifier - The user identifier.
-    */
-    Database.prototype.getAccount = function (identifier) {
-        return __awaiter(this, void 0, void 0, function () {
-            var accounts, accountObj;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        accounts = this.db.collection('accounts');
-                        return [4 /*yield*/, accounts.findOne({ identifier: identifier })];
-                    case 1:
-                        accountObj = _a.sent();
-                        if (!accountObj)
-                            throw "This user no longer exists.";
-                        return [2 /*return*/, accountObj];
-                }
-            });
-        });
-    };
-    /**
-    * Create a user in the database from a user string, a name, and a password.
-    * Throws if another user with the same user string already exists.
-    *
-    * @param {string} identifier - The user identifier in the form of a subdomain.
-    * @param {string} name - A username that the user will be referred to as.
-    * @param {string} password - A password for the user account.
-    */
-    Database.prototype.createAccount = function (identifier, name, password) {
+    Database.prototype.updatePassword = function (identifier, password) {
         return __awaiter(this, void 0, void 0, function () {
             var accounts, pass;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         accounts = this.db.collection('accounts');
-                        return [4 /*yield*/, accounts.findOne({ identifier: identifier })];
-                    case 1:
-                        if ((_a.sent()) != null)
-                            throw "A user with this email address already exists.";
                         return [4 /*yield*/, bcrypt_1.default.hash(password, 10)];
-                    case 2:
+                    case 1:
                         pass = _a.sent();
-                        return [4 /*yield*/, accounts.insertOne({ name: name, identifier: identifier, pass: pass })];
-                    case 3:
+                        return [4 /*yield*/, accounts.updateOne({ identifier: identifier }, { $set: { pass: pass } })];
+                    case 2:
                         _a.sent();
                         return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+    * Deletes an account.
+    *
+    * @param {string} identifier - The account to delete.
+    */
+    Database.prototype.deleteAccount = function (identifier) {
+        return __awaiter(this, void 0, void 0, function () {
+            var accounts;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        accounts = this.db.collection('accounts');
+                        return [4 /*yield*/, accounts.deleteOne({ identifier: identifier })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+    * Lists all of the accounts
+    */
+    Database.prototype.listAccounts = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var accounts;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        accounts = this.db.collection('accounts');
+                        return [4 /*yield*/, accounts.find({}).toArray()];
+                    case 1: return [2 /*return*/, (_a.sent()).map(function (a) { return a.identifier; })];
                 }
             });
         });

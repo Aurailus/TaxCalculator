@@ -16,8 +16,7 @@ class Theme {
 
 		if (DATA.theme.showTitle) $("#display_sys_title").prop('checked', true);
 
-		let ctx = this;
-		$("input").each(function() { $(this).change(() => ctx.showUnsaved()); });
+		document.querySelectorAll("input").forEach((e) => e.addEventListener('input', () => this.showUnsaved()));
 		$(".save_options .save").click(() => this.attemptSave());
 	}
 

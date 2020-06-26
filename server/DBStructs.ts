@@ -35,7 +35,7 @@ export interface Calculator {
 
 export interface Theme {
 	showTitle: boolean;
-	hasHeader: boolean;
+	hasHeader: string;
 
 	headerTheme: string;
 	backgroundTheme: string;

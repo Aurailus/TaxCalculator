@@ -1,0 +1,99 @@
+doctype html
+html
+	head
+		meta(http-equiv='Content-Type' content='text/html; charset=utf-8')
+		meta(name='viewport' content='width=device-width, initial-scale=1.0')
+		link(rel='icon' href='/public/favicon.ico')
+
+		link(href='https://fonts.googleapis.com/css?family=Montserrat:400,500|Nunito:300,400,600|Fira+Sans:400i,500i' rel='stylesheet')
+		link(href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet')
+		link(rel='stylesheet' href='/public/calculator/style/build/css/calculator.css')
+
+		script(src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js")
+		script(src="https://code.jquery.com/jquery-3.3.1.min.js")
+		script(src="/public/calculator/admin_script.js")
+		
+		title Admin Panel &nbsp;&bullet;&nbsp; Aurailus Design
+		
+		meta(name='copyright' content='(c) 2019 - present Aurailus Design, All Rights Reserved.')
+		meta(name='description' content='Calculate your estimated taxes online!')
+		meta(name='keywords' content='Tax, Calculator, Residential Tax, Tax Calculator')
+		meta(name='author' content='Aurailus Design')
+		meta(name='robots' content='noindex,nofollow')
+		meta(name='theme-color' content='#333')
+		
+		//- Global site tag (gtag.js) - Google Analytics
+		script(async src='https://www.googletagmanager.com/gtag/js?id=UA-150100799-3')
+		script.
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'UA-150100799-3');
+			
+	body#admin
+		aside
+			.logo
+			nav
+				div
+					a(href='/admin/config')
+						i.material-icons multiline_chart
+						| Calculations
+				div
+					a(href='/admin/theme')
+						i.material-icons palette
+						| Theme and Colors
+
+				hr
+
+				div
+					a(href='javascript:logout();')
+						i.material-icons lock
+						| Log out
+				div
+					a(href='/')
+						i.material-icons launch
+						| View Site
+				
+				hr
+
+				div
+					a(href='/admin/support')
+						i.material-icons help_outline
+						| Support
+
+		main
+			.wrap
+				.col2
+					form(method='POST')
+						h2 Create Account
+						p Use with caution.
+						input(type='hidden' name='action' value='create_account')
+						label(for='username_create') Username
+						input#username_create(type='text' name='username')
+						label(for='password_create') Password
+						input#password_create(type='password' name='password')
+						label(for='subdomain') Subdomain
+						input#subdomain(type='text' name='subdomain')
+						button(type='submit') Submit
+				.col2
+					form(method='POST')
+						h2 Change Password
+						p For the dumb.
+						input(type='hidden' name='action' value='change_password')
+						label(for='username_password') Subdomain
+						input#username_password(type='text' name='subdomain')
+						label(for='password_password') New Password
+						input#password_password(type='password' name='password')
+						button(type='submit') Submit
+				.col2
+					form(method='POST')
+						h2 Delete Account
+						p DANGER
+						input(type='hidden' name='action' value='delete_account')
+						label(for='username_delete') Subdomain
+						input#username_delete(type='text' name='subdomain')
+						button(type='submit') Submit
+				.col2
+					each acct in accts
+						p #{acct}
+

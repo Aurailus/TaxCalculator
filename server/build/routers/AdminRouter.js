@@ -76,6 +76,9 @@ var AdminRouter = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.db.authUser(req)];
                     case 1:
                         user = _a.sent();
+                        console.log(sub, user);
+                        if (sub != user)
+                            throw "Username doesn't match subdomain";
                         return [4 /*yield*/, this.db.getCalculator(sub)];
                     case 2:
                         calc = _a.sent();
@@ -89,8 +92,8 @@ var AdminRouter = /** @class */ (function (_super) {
                 }
             });
         }); });
-        router.get('/admin/theme', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var sub, user, calc, e_2;
+        router.post('/admin/config', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var sub, user, e_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -101,45 +104,198 @@ var AdminRouter = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.db.authUser(req)];
                     case 1:
                         user = _a.sent();
-                        return [4 /*yield*/, this.db.getCalculator(sub)];
+                        if (sub != user)
+                            throw "Username doesn't match subdomain";
+                        return [4 /*yield*/, this.db.updateCalculator(user, {
+                                $set: req.body
+                            })];
                     case 2:
-                        calc = _a.sent();
-                        res.render('admin/theme', { calc: calc });
+                        _a.sent();
+                        res.sendStatus(200);
                         return [3 /*break*/, 4];
                     case 3:
                         e_2 = _a.sent();
-                        res.redirect('/admin');
+                        this.routeError(res, 403, e_2);
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/];
                 }
             });
         }); });
         router.post('/admin/theme', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var sub, user, e_3;
             return __generator(this, function (_a) {
-                console.log(req.body);
-                res.redirect('/admin/theme');
-                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        if (!req.subdomains || req.subdomains.length != 1)
+                            throw "Missing subdomain";
+                        sub = req.subdomains[0];
+                        return [4 /*yield*/, this.db.authUser(req)];
+                    case 1:
+                        user = _a.sent();
+                        if (sub != user)
+                            throw "Username doesn't match subdomain";
+                        if (!req.body || typeof req.body.headerTheme != "string" ||
+                            typeof req.body.backgroundTheme != "string" || typeof req.body.title != "string")
+                            throw "Missing required paramenters.";
+                        return [4 /*yield*/, this.db.updateCalculator(user, {
+                                $set: {
+                                    title: req.body.title,
+                                    theme: {
+                                        headerTheme: req.body.headerTheme,
+                                        backgroundTheme: req.body.backgroundTheme,
+                                        hasTitle: !!req.body.hasTitle
+                                    }
+                                }
+                            })];
+                    case 2:
+                        _a.sent();
+                        res.redirect('/admin/theme');
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_3 = _a.sent();
+                        this.routeError(res, 403, e_3);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        }); });
+        router.get('/admin/image/upload', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var sub, user, e_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        if (!req.subdomains || req.subdomains.length != 1)
+                            throw "Missing subdomain";
+                        sub = req.subdomains[0];
+                        return [4 /*yield*/, this.db.authUser(req)];
+                    case 1:
+                        user = _a.sent();
+                        if (sub != user)
+                            throw "Username doesn't match subdomain";
+                        res.render('admin/upload');
+                        return [3 /*break*/, 3];
+                    case 2:
+                        e_4 = _a.sent();
+                        res.redirect('/admin');
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); });
+        router.post('/admin/image/upload', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var sub, user, file, e_5;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        if (!req.subdomains || req.subdomains.length != 1)
+                            throw "Missing subdomain";
+                        sub = req.subdomains[0];
+                        return [4 /*yield*/, this.db.authUser(req)];
+                    case 1:
+                        user = _a.sent();
+                        if (sub != user)
+                            throw "Username doesn't match subdomain";
+                        if (!req.files || !req.files.image)
+                            throw "No files were specified.";
+                        if (Array.isArray(req.files.image))
+                            throw "Multiplie files were sent in one request.";
+                        file = req.files.image;
+                        return [4 /*yield*/, this.db.setHeader(user, file)];
+                    case 2:
+                        _a.sent();
+                        res.redirect('/admin/theme');
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_5 = _a.sent();
+                        console.log(e_5);
+                        if (typeof e_5 == "string")
+                            res.render('admin/upload', { err: e_5.toString() });
+                        else
+                            res.render('admin/upload');
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        }); });
+        router.get('/admin/image/delete', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var sub, user, e_6;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        if (!req.subdomains || req.subdomains.length != 1)
+                            throw "Missing subdomain";
+                        sub = req.subdomains[0];
+                        return [4 /*yield*/, this.db.authUser(req)];
+                    case 1:
+                        user = _a.sent();
+                        if (sub != user)
+                            throw "Username doesn't match subdomain";
+                        return [4 /*yield*/, this.db.unlinkHeader(user)];
+                    case 2:
+                        _a.sent();
+                        res.redirect('/admin/theme');
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_6 = _a.sent();
+                        if (typeof e_6 == "string")
+                            res.render('admin/upload', { err: e_6.toString() });
+                        else
+                            res.render('admin/upload');
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        }); });
+        router.get('/admin/support', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var sub, user, e_7;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        if (!req.subdomains || req.subdomains.length != 1)
+                            throw "Missing subdomain";
+                        sub = req.subdomains[0];
+                        return [4 /*yield*/, this.db.authUser(req)];
+                    case 1:
+                        user = _a.sent();
+                        if (sub != user)
+                            throw "Username doesn't match subdomain";
+                        res.render('admin/support');
+                        return [3 /*break*/, 3];
+                    case 2:
+                        e_7 = _a.sent();
+                        res.render('support');
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
             });
         }); });
         router.get('/admin', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var user, e_3;
+            var sub, user, e_8;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         if ((req.useragent || {}).browser == "IE" && (req.useragent || {}).version != "11.0")
                             return [2 /*return*/, res.render('unsupported')];
-                        if (!req.subdomains || req.subdomains.length != 1)
-                            return [2 /*return*/, res.redirect('/')];
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
+                        if (!req.subdomains || req.subdomains.length != 1)
+                            return [2 /*return*/, res.redirect('/')];
+                        sub = req.subdomains[0];
                         return [4 /*yield*/, this.db.authUser(req)];
                     case 2:
                         user = _a.sent();
+                        if (sub != user)
+                            throw "Username doesn't match subdomain";
                         res.redirect('/admin/config');
                         return [3 /*break*/, 4];
                     case 3:
-                        e_3 = _a.sent();
+                        e_8 = _a.sent();
                         res.render('admin/login');
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/];
@@ -147,7 +303,7 @@ var AdminRouter = /** @class */ (function (_super) {
             });
         }); });
         router.post('/auth', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var user, pass, sub, _a, _b, e_4;
+            var user, pass, sub, _a, _b, e_9;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
@@ -165,10 +321,85 @@ var AdminRouter = /** @class */ (function (_super) {
                         _b.apply(_a, [_c.sent()]);
                         return [3 /*break*/, 3];
                     case 2:
-                        e_4 = _c.sent();
-                        this.routeError(res, 403, e_4);
+                        e_9 = _c.sent();
+                        this.routeError(res, 403, e_9);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
+                }
+            });
+        }); });
+        router.get('/admin/super', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var sub, user, _a, _b, _c, _d, e_10;
+            return __generator(this, function (_e) {
+                switch (_e.label) {
+                    case 0:
+                        _e.trys.push([0, 3, , 4]);
+                        if (!req.subdomains || req.subdomains.length != 1)
+                            throw "Missing subdomain";
+                        sub = req.subdomains[0];
+                        return [4 /*yield*/, this.db.authUser(req)];
+                    case 1:
+                        user = _e.sent();
+                        if (sub != user)
+                            throw "Username doesn't match subdomain";
+                        if (user != "aurailus")
+                            throw "Not superuser";
+                        _b = (_a = res).render;
+                        _c = ['admin/super'];
+                        _d = {};
+                        return [4 /*yield*/, this.db.listAccounts()];
+                    case 2:
+                        _b.apply(_a, _c.concat([(_d.accts = _e.sent(), _d)]));
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_10 = _e.sent();
+                        res.redirect('/admin');
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        }); });
+        router.post('/admin/super', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var sub, user, e_11;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 8, , 9]);
+                        if (!req.subdomains || req.subdomains.length != 1)
+                            throw "Missing subdomain";
+                        sub = req.subdomains[0];
+                        return [4 /*yield*/, this.db.authUser(req)];
+                    case 1:
+                        user = _a.sent();
+                        if (sub != user)
+                            throw "Username doesn't match subdomain";
+                        if (user != "aurailus")
+                            throw "Not superuser";
+                        if (!(req.body.action == "create_account")) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.db.createAccount(req.body.subdomain, req.body.username, req.body.password)];
+                    case 2:
+                        _a.sent();
+                        _a.label = 3;
+                    case 3:
+                        if (!(req.body.action == "change_password")) return [3 /*break*/, 5];
+                        return [4 /*yield*/, this.db.updatePassword(req.body.subdomain, req.body.password)];
+                    case 4:
+                        _a.sent();
+                        _a.label = 5;
+                    case 5:
+                        if (!(req.body.action == "delete_account")) return [3 /*break*/, 7];
+                        return [4 /*yield*/, this.db.deleteAccount(req.body.subdomain)];
+                    case 6:
+                        _a.sent();
+                        _a.label = 7;
+                    case 7:
+                        res.redirect('/admin/super');
+                        return [3 /*break*/, 9];
+                    case 8:
+                        e_11 = _a.sent();
+                        res.redirect('/admin');
+                        return [3 /*break*/, 9];
+                    case 9: return [2 /*return*/];
                 }
             });
         }); });

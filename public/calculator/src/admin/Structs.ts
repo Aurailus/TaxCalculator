@@ -9,12 +9,13 @@ interface CalculatorData {
 	taxes: Tax[];
 	fees: Fee[];
 	grants: Grant[];
+	defaultGrant: number;
 	insights: Insights;
 }
 
 interface Theme {
 	showTitle: boolean;
-	hasHeader: boolean;
+	hasHeader: string;
 
 	headerTheme: string;
 	backgroundTheme: string;

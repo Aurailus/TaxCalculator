@@ -105,8 +105,8 @@ class ResultBarChart {
 	}
 
 	private draw(p: p5, w: number, h: number) {
-		let colorsLight = ["#c73092", "#b12bba", "#8139c0", "#5239c0", "#3447bd", "#296cdb", "#1c91f7", "#00b8d0", "#00a091"];
-		let colorsDark	= ["#9c196d", "#911f99", "#6b2aa3", "#3d289a", "#273a9e", "#224ac2", "#0b6fdf", "#009dab", "#008377"];
+		let colorsLight = ["#c73044", "#c73092", "#b12bba", "#8139c0", "#5239c0", "#3447bd", "#296cdb", "#1c91f7", "#00b8d0", "#00a091"];
+		let colorsDark	= ["#ad2335", "#9c196d", "#911f99", "#6b2aa3", "#3d289a", "#273a9e", "#224ac2", "#0b6fdf", "#009dab", "#008377"];
 
 		p.background($("body").hasClass('light') ? "#fff" : "#333");
 
@@ -130,7 +130,7 @@ class ResultBarChart {
 			for (let s = 0; s <= (this.procPrev ? 1 : 0); s++) {
 
 				let table = (s == 0 ? this.dataCurr : this.dataPrev);
-				let color = ((s == 0) ? colorsLight : colorsDark)[8 - (i % 9)];
+				let color = ((s == 0) ? colorsLight : colorsDark)[9 - (i % 10)];
 				let data = table[table.length - 1 - i];
 
 				let barWidth = Math.max((w - barLeft - 20) * (data.amount / maxPercent), 3);

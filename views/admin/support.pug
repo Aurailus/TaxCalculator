@@ -1,0 +1,101 @@
+doctype html
+html
+	head
+		meta(http-equiv='Content-Type' content='text/html; charset=utf-8')
+		meta(name='viewport' content='width=device-width, initial-scale=1.0')
+		link(rel='icon' href='/public/favicon.ico')
+
+		link(href='https://fonts.googleapis.com/css?family=Montserrat:400,500|Nunito:300,400,600|Fira+Sans:400i,500i' rel='stylesheet')
+		link(href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet')
+		link(rel='stylesheet' href='/public/calculator/style/build/css/calculator.css')
+
+		script(src="https://code.jquery.com/jquery-3.3.1.min.js")
+		script(src="/public/calculator/admin_script.js")
+		
+		title Admin Panel &nbsp;&bullet;&nbsp; Aurailus Design
+		
+		meta(name='copyright' content='(c) 2019 - present Aurailus Design, All Rights Reserved.')
+		meta(name='description' content='Calculate your estimated taxes online!')
+		meta(name='keywords' content='Tax, Calculator, Residential Tax, Tax Calculator')
+		meta(name='author' content='Aurailus Design')
+		meta(name='robots' content='noindex,nofollow')
+		meta(name='theme-color' content='#333')
+		
+		//- Global site tag (gtag.js) - Google Analytics
+		script(async src='https://www.googletagmanager.com/gtag/js?id=UA-150100799-3')
+		script.
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'UA-150100799-3');
+
+	body#admin
+		aside
+			.logo
+			nav
+				div
+					a(href='/admin/config')
+						i.material-icons multiline_chart
+						| Calculations
+				div
+					a(href='/admin/theme')
+						i.material-icons palette
+						| Theme and Colors
+
+				hr
+
+				div
+					a(href='javascript:logout();')
+						i.material-icons lock
+						| Log out
+				div
+					a(href='/')
+						i.material-icons launch
+						| View Site
+				
+				hr
+
+				div.active
+					a(href='/admin/support')
+						i.material-icons help_outline
+						| Support
+
+		main
+			.wrap
+				h2
+					strong Frequently asked Questions
+				h2 General
+				div
+				p(style='margin-top: 2px; margin-bottom: 0px')
+					strong What browsers are supported by the Tax Calculator?
+				p(style='color: #bbb')
+					| The Tax Calculator supports Internet Explorer 11, Microsoft Edge, Google Chrome &amp; any other Chromium based browser, Mozilla Firefox, Opera, Samsung Internet, and Safari. We do not support Internet Explorer 10 or under, and are not planning to implement support.
+				p(style='margin-top: 2px; margin-bottom: 0px')
+					strong How do I change my Password?
+				p(style='color: #bbb')
+					| Contact 
+					a(style='color:#92adde' href='mailto:nicole@aurailus.design') nicole@aurailus.design
+					|  to request a password reset, and we will get back to you within 48 hours.
+				h2 Calculations
+				div
+				p(style='margin-top: 2px; margin-bottom: 0px')
+					strong What is &quot;Current Year?&quot;
+				p(style='color: #bbb')
+					| The &quot;Current Year&quot; field is the year that the Calculator is set up for. For example, if at the beginning of 2020 you fill in the updated information for calculating taxes that year, you would set the year to 2020. If you haven&apos;t updated the information, you should not update the value, as it is used to show users what year the Calculator&apos;s information is for.
+				p(style='margin-top: 2px; margin-bottom: 0px')
+					strong What do the &quot;Move Current to Previous&quot; buttons do?
+				p(style='color: #bbb')
+					| The &quot;Move Current to Previous&quot; buttons move all values on the left side of a category to the right side, deleting the right side ones. This is for updating the calculator to a new year, when all of the values in the current year&apos;s column should be in the previous year&apos;s column.
+				h2 Security
+				div
+				p(style='margin-top: 2px; margin-bottom: 0px')
+					strong Is my data safe?
+				p(style='color: #bbb')
+					| All user data is securely stored in an enterprise grade VPS located in Toronto. This VPS is rented from Digital Ocean, you can view their privacy policy 
+					a(style='color:#92adde' href='https://www.digitalocean.com/legal/privacy-policy/') here
+					| .
+				h2 Contact
+				p
+					| Need additional help? No problem. Aurailus Design is just an email away: 
+					a(style='color:#92adde' href='mailto:nicole@aurailus.design') nicole@aurailus.design
+

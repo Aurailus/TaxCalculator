@@ -52,19 +52,21 @@ class Calculator {
 	private calculate() {
 		let prev = this.inputs.previousYearEnabledElem.prop('checked');
 
+		let calculateAll = prev && this.inputs.prevLotVacancyElem.prop('checked') != this.inputs.currLotVacancyElem.prop('checked');
+
 		let procPrev: ProcessedResults;
 		let procCurr: ProcessedResults = this.process(true, 
 			parseInt(this.inputs.currAssessedValueElem.val().toString()),
 			!this.inputs.currLotVacancyElem.prop('checked'),
 			parseInt(this.inputs.currHomeownerGrantElem.children('.item').attr('val')),
-			parseInt(this.inputs.currTaxPrepaymentsElem.val().toString()));
+			parseInt(this.inputs.currTaxPrepaymentsElem.val().toString()), calculateAll);
 
 		if (prev) {
 			procPrev = this.process(false, 
 				parseInt(this.inputs.prevAssessedValueElem.val().toString()),
 				!this.inputs.prevLotVacancyElem.prop('checked'),
 				parseInt(this.inputs.prevHomeownerGrantElem.children('.item').attr('val')),
-				parseInt(this.inputs.prevTaxPrepaymentsElem.val().toString()));
+				parseInt(this.inputs.prevTaxPrepaymentsElem.val().toString()), calculateAll);
 		}
 
 		//Sort by Value
@@ -161,7 +163,7 @@ class Calculator {
 	}
 
 	//Return a table of calculated tax values.
-	private process(current: boolean, assessed: number, occupied: boolean, grantInd: number, prepayments: number) : ProcessedResults {
+	private process(current: boolean, assessed: number, occupied: boolean, grantInd: number, prepayments: number, calculateAll: boolean) : ProcessedResults {
 		let taxes: Payout[] = [];
 		let fees: Payout[] = [];
 		let sum = 0;
@@ -173,8 +175,12 @@ class Calculator {
 		}
 
 		for (let fee of DATA.fees) {
-			if (fee.requiresOccupancyState !== undefined && fee.requiresOccupancyState != occupied) continue;
-			let value = (current ? fee.values.current : fee.values.previous);
+			let value;
+			if (fee.requiresOccupancyState !== undefined && fee.requiresOccupancyState != occupied) {
+				if (!calculateAll) continue;
+				value = 0;
+			}
+			else value = (current ? fee.values.current : fee.values.previous);
 			fees.push({name: fee.name, value: value});
 			sum += value;
 		}

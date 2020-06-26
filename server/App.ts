@@ -4,7 +4,7 @@ import Express from "express";
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import userAgent from 'express-useragent';
-// import fileUpload from 'express-fileupload';
+import fileUpload from 'express-fileupload';
 
 import Database from "./Database";
 import CalcRouter from "./routers/CalcRouter";
@@ -21,12 +21,11 @@ export default class App {
 
 	constructor() {
 
-		// this.app.use(fileUpload({limits: {fileSize: uploadLimit}, useTempFiles: true, tempFileDir: '/tmp/'}));
-
 		this.app.use(cookieParser());
 		this.app.use(bodyParser.json());
 		this.app.use(userAgent.express());
 		this.app.use(bodyParser.urlencoded({extended: true}));
+		this.app.use(fileUpload({limits: {fileSize: 2 * 1024 * 1024}, useTempFiles: true, tempFileDir: '/tmp/'}));
 		this.app.set('view engine', 'pug');
 
 		this.db.init().then(async () => {

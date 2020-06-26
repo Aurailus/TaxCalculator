@@ -1,0 +1,81 @@
+doctype html
+html
+	head
+		meta(http-equiv='Content-Type' content='text/html; charset=utf-8')
+		meta(name='viewport' content='width=device-width, initial-scale=1.0')
+		link(rel='icon' href='/public/favicon.ico')
+
+		link(href='https://fonts.googleapis.com/css?family=Montserrat:400,500|Nunito:300,400,600|Fira+Sans:400i,500i' rel='stylesheet')
+		link(href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet')
+		link(rel='stylesheet' href='/public/calculator/style/build/css/calculator.css')
+
+		script(src="https://code.jquery.com/jquery-3.3.1.min.js")
+		script(src="/public/calculator/admin_script.js")
+		
+		title Admin Panel &nbsp;&bullet;&nbsp; Aurailus Design
+		
+		meta(name='copyright' content='(c) 2019 - present Aurailus Design, All Rights Reserved.')
+		meta(name='description' content='Calculate your estimated taxes online!')
+		meta(name='keywords' content='Tax, Calculator, Residential Tax, Tax Calculator')
+		meta(name='author' content='Aurailus Design')
+		meta(name='robots' content='noindex,nofollow')
+		meta(name='theme-color' content='#333')
+		
+		//- Global site tag (gtag.js) - Google Analytics
+		script(async src='https://www.googletagmanager.com/gtag/js?id=UA-150100799-3')
+		script.
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'UA-150100799-3');
+
+	body#admin
+		aside
+			.logo
+			nav
+				div
+					a(href='/admin')
+						i.material-icons vpn_key
+						| Log in
+				div
+					a(href='/' target='_blank')
+						i.material-icons launch
+						| View Site
+				hr
+
+				div.active
+					a(href='/admin/support')
+						i.material-icons help_outline
+						| Support
+
+		main
+			.wrap
+				h2
+					strong Frequently asked Questions
+				p
+					strong NOTE: Different information displays when logged in.
+				h2 General
+				div
+				p(style='margin-top: 2px; margin-bottom: 0px')
+					strong I forgot my password!
+				p(style='color: #bbb')
+					| Contact 
+					a(style='color:#92adde' href='mailto:nicole@aurailus.design') nicole@aurailus.design
+					|  to request a password reset, and we will get back to you within 48 hours.
+				p(style='margin-top: 2px; margin-bottom: 0px')
+					strong What browsers are supported by the Tax Calculator?
+				p(style='color: #bbb')
+					| The Tax Calculator supports Internet Explorer 11, Microsoft Edge, Google Chrome &amp; any other Chromium based browser, Mozilla Firefox, Opera, Samsung Internet, and Safari. We do not support Internet Explorer 10 or under, and are not planning to implement support.
+				h2 Security
+				div
+				p(style='margin-top: 2px; margin-bottom: 0px')
+					strong Is my data safe?
+				p(style='color: #bbb')
+					| All user data is securely stored in an enterprise grade VPS located in Toronto. This VPS is rented from Digital Ocean, you can view their privacy policy 
+					a(style='color:#92adde' href='https://www.digitalocean.com/legal/privacy-policy/') here
+					| .
+				h2 Contact
+				p
+					| Need additional help? No problem. Aurailus Design is just an email away: 
+					a(style='color:#92adde' href='mailto:nicole@aurailus.design') nicole@aurailus.design
+

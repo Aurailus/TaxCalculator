@@ -45,13 +45,12 @@ var express_1 = __importDefault(require("express"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var cookie_parser_1 = __importDefault(require("cookie-parser"));
 var express_useragent_1 = __importDefault(require("express-useragent"));
-// import fileUpload from 'express-fileupload';
+var express_fileupload_1 = __importDefault(require("express-fileupload"));
 var Database_1 = __importDefault(require("./Database"));
 var CalcRouter_1 = __importDefault(require("./routers/CalcRouter"));
 var AdminRouter_1 = __importDefault(require("./routers/AdminRouter"));
 var App = /** @class */ (function () {
     function App() {
-        // this.app.use(fileUpload({limits: {fileSize: uploadLimit}, useTempFiles: true, tempFileDir: '/tmp/'}));
         var _this = this;
         this.port = 3000;
         this.app = express_1.default();
@@ -61,6 +60,8 @@ var App = /** @class */ (function () {
         this.app.use(cookie_parser_1.default());
         this.app.use(body_parser_1.default.json());
         this.app.use(express_useragent_1.default.express());
+        this.app.use(body_parser_1.default.urlencoded({ extended: true }));
+        this.app.use(express_fileupload_1.default({ limits: { fileSize: 2 * 1024 * 1024 }, useTempFiles: true, tempFileDir: '/tmp/' }));
         this.app.set('view engine', 'pug');
         this.db.init().then(function () { return __awaiter(_this, void 0, void 0, function () {
             var server;

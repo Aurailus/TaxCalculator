@@ -9,6 +9,7 @@ html
 		link(href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet')
 		link(rel='stylesheet' href='/public/calculator/style/build/css/calculator.css')
 
+		script(src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js")
 		script(src="https://code.jquery.com/jquery-3.3.1.min.js")
 		script(src="/public/calculator/admin_script.js")
 		
@@ -48,7 +49,7 @@ html
 				hr
 
 				div
-					a(href='/admin/logout')
+					a(href='javascript:logout();')
 						i.material-icons lock
 						| Log out
 				div
@@ -59,7 +60,7 @@ html
 				hr
 
 				div
-					a(href='/')
+					a(href='/admin/support')
 						i.material-icons help_outline
 						| Support
 
@@ -83,6 +84,8 @@ html
 					input#background_transparent.background_picker(type="radio" name="backgroundTheme" value="trans")
 					label.background_picker(for="background_transparent" style="background-color: #999; color:#333") Transparent&nbsp;
 
+					input(type="hidden" name="hasHeader" value=calc.theme.hasHeader)
+
 					p(style="max-width: 350px;") Note: The "Transparent" background color will inherit the color of the parent website.</p>
 					br
 
@@ -98,21 +101,12 @@ html
 						
 					label Header Image
 						.header_image_select
-					//- 		<?php
-					//- 			if ($row['has_header']) {
-					//- 				echo "<img class='header_image_preview' src='/headers/$CLIENT_ID.png'>";
-					//- 			}
-					//- 		?>
-					//- 		<div class="opts"> 
-					//- 			<?php
-					//- 				if ($row['has_header']) {
-					//- 					echo '<a class="button" href="./deleteImage.php">Delete Image</a>';
-					//- 				}
-					//- 			?>
-					//- 			<a class="button" href="./uploadImage.php">Upload new Image</a>
-					//- 		</div>
-					//- 	</div>
-					//- </div>
+							if calc.theme.hasHeader
+								img.header_image_preview(src='/public/headers/' + calc.identifier + calc.theme.hasHeader)
+							.opts 
+								if calc.theme.hasHeader
+									a.button(href="./image/delete") Delete Image
+								a.button(href="./image/upload") Upload new Image
 			
 		.save_options_wrap
 			.save_options

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --config ./server/nodemon.json"
+    "dev": "nodemon --config ./server/nodemon.json",
+    "start": "ts-node --project ./server/tsconfig.json ./server/index.ts; node ./server/index.ts"
   },
   "author": "",
   "license": "UNLICENSED",

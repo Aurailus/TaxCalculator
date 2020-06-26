@@ -32,10 +32,10 @@ class ResultPieChart {
 		let values: PieChartElem[] = [];
 
 		let count = 0;
-		let maxCount = 8;
+		let maxCount = 10;
 		for (let i = table.allPayouts.length - 1; i >= 0; i--) {
 			let payout = table.allPayouts[i];
-			if (++count < maxCount) {
+			if (++count < maxCount || table.allPayouts.length == maxCount) {
 				values.push({
 					name: payout.name,
 					amount: payout.value,
@@ -157,7 +157,7 @@ class ResultPieChart {
 						activeNum = i;
 					}
 
-					let colorInd = mod(i - table.length + 9, 9);
+					let colorInd = mod(i - table.length + 10, 10);
 					p.fill((active ? colorsActive[colorInd] : colorsFill[colorInd]));
 					p.stroke($("body").hasClass('light') ? (active ? colorsActive[colorInd] : colorsFill[colorInd]) : (active ? "#fff" : colorsFill[colorInd]));
 				}
@@ -209,10 +209,10 @@ class ResultPieChart {
 	}
 
 	private draw(p: p5, w: number, h: number) {
-		let colorsLightActive = ["#e838aa", "#c93bd4", "#964ad9", "#5239c0", "#4b5dcd", "#3f7bdf", "#3ca2f8", "#37d7e5", "#4ac6bc"];
-		let colorsLight 			= ["#c73092", "#b12bba", "#8139c0", "#5239c0", "#3447bd", "#296cdb", "#1c91f7", "#00b8d0", "#00a091"];
-		let colorsDarkActive  = ["#b52281", "#a224ab", "#752eb3", "#422ca4", "#3447bd", "#296cdb", "#2a98f7", "#19c6d9", "#21b1a4"];
-		let colorsDark				= ["#9c196d", "#911f99", "#6b2aa3", "#3d289a", "#273a9e", "#224ac2", "#0b6fdf", "#009dab", "#008377"];
+		let colorsLightActive = ["#de3e53", "#e838aa", "#c93bd4", "#964ad9", "#5239c0", "#4b5dcd", "#3f7bdf", "#3ca2f8", "#37d7e5", "#4ac6bc"];
+		let colorsLight 			= ["#c73044", "#c73092", "#b12bba", "#8139c0", "#5239c0", "#3447bd", "#296cdb", "#1c91f7", "#00b8d0", "#00a091"];
+		let colorsDarkActive  = ["#bd283b", "#b52281", "#a224ab", "#752eb3", "#422ca4", "#3447bd", "#296cdb", "#2a98f7", "#19c6d9", "#21b1a4"];
+		let colorsDark				= ["#ad2335", "#9c196d", "#911f99", "#6b2aa3", "#3d289a", "#273a9e", "#224ac2", "#0b6fdf", "#009dab", "#008377"];
 
 		p.background($("body").hasClass('light') ? "#fff" : "#333");
 
@@ -267,7 +267,7 @@ class ResultPieChart {
 			let x = 0;
 			if (prev) x += 240;
 
-			p.fill(colorsLight[mod(i - this.dataCurr.length + 9, 9)]);
+			p.fill(colorsLight[mod(i - this.dataCurr.length + 10, 10)]);
 			p.stroke($("body").hasClass('light') ? "#fff" : "#fff");
 			p.strokeWeight(2);
 			p.ellipse(mw, mh - 7, 16);

@@ -42,7 +42,8 @@ html
 		#frame_wrap
 			.header_wrap(class=calc.theme.headerTheme)
 				
-				img.calc_image_header(src='/headers/header.png')
+				if calc.theme.hasHeader
+					img.calc_image_header(src='/public/headers/' + calc.identifier + calc.theme.hasHeader)
 				h1
 					if calc.title
 						strong(style='font-size: 0.7em; font-weight: 300;') #{calc.title}
@@ -111,7 +112,7 @@ html
 			footer(class=calc.theme.backgroundTheme == "trans" ? "transparent" : "")
 				p.promo
 					| This tool was developed by 
-					a(href='/' target='_blank') Aurailus Design.
+					a(href='https://tax-calculator.ca/' target='_blank') Aurailus Design.
 				p.disclaimer The information presented is an estimation only and actual tax levy could vary from the estimation.
 
 				button.secondary.inline#admin

@@ -3,7 +3,7 @@ import path from 'path';
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import { MongoClient, Db } from 'mongodb';
-// import { UploadedFile } from 'express-fileupload';
+import { UploadedFile } from 'express-fileupload';
 
 import * as DB from './DBStructs'
 
@@ -20,22 +20,111 @@ export default class Database {
 		console.log("Successfully connected to MongoDB");
 
 		this.db = this.client.db(dbName);
+	}
 
-		// // Temp: Delete all users.
-		await this.db.collection('accounts').deleteMany({});
-		await this.db.collection('calculators').deleteMany({});
+	/**
+	* Get Calculator data from the database using
+	* a subdomain as an identifier.
+	*
+	* @param {string} subdomain - The calculator identifier.
+	*/
 
-		await this.createAccount("powellriver", "Powell River", "");
+	async getCalculator(subdomain: string): Promise<DB.Calculator> {
+		const calculators = this.db!.collection('calculators');
+		const calculatorObj: DB.Calculator | null = await calculators.findOne({identifier: subdomain});
+		if (!calculatorObj) throw "This calculator does not exist.";
+
+		return calculatorObj;
+	}
+
+	/**
+	* Updates a calculator using with specified data.
+	*
+	* @param {string} subdomain - The calculator identifier.
+	* @param {any} data - The Update object.
+	*/
+
+	async updateCalculator(subdomain: string, update: any) {
+		const calculators = this.db!.collection('calculators');
+		await calculators.updateOne({identifier: subdomain}, update);
+	}
+
+	/**
+	* Sets a header image to a file.
+	* Throws if the file is somehow invalid.
+	*
+	* @param {string} subdomain - The calculator identifier.
+	* @param {UploadedFile} file - The image file.
+	*/
+
+	async setHeader(subdomain: string, file: UploadedFile) {
+		const accountObj = await this.getAccount(subdomain);
+
+		if (file.mimetype != "image/png" && file.mimetype != "image/jpeg") 
+			throw "Uploaded file must be a PNG or JPEG file.";
+
+		if (file.size > 2 * 1024 * 1024 || file.truncated) 
+			throw "Uploaded file must be < 2MB.";
+
+		let ext = file.mimetype == "image/png" ? ".png" : ".jpg";
+		await file.mv(path.join(__dirname, "/../public/headers/" + subdomain + ext));
+
+		await this.db!.collection('calculators').updateOne(
+			{identifier: subdomain}, {$set: { "theme.hasHeader": ext }});
+	}
+
+	/**
+	* Removes a header from an account.
+	*
+	* @param {string} subdomain - The calculator identifier.
+	*/
+
+	async unlinkHeader(subdomain: string) {
+		await this.db!.collection('calculators').updateOne(
+			{identifier: subdomain}, {$set: { "theme.hasHeader": "" }});
+	}
+
+	/**
+	* Get a User database object from a user identifier.
+	* Throws if the user doesn't exist.
+	*
+	* @param {string} identifier - The user identifier.
+	*/
+
+	async getAccount(identifier: string): Promise<DB.Account> {
+		const accounts = this.db!.collection('accounts');
+		const accountObj: DB.Account | null = await accounts.findOne({identifier: identifier});
+		if (!accountObj) throw "This user no longer exists.";
+
+		return accountObj;
+	}
+
+
+	/**
+	* Create a user in the database from a user string, a name, and a password.
+	* Throws if another user with the same user string already exists.
+	*
+	* @param {string} identifier - The user identifier in the form of a subdomain.
+	* @param {string} name - A username that the user will be referred to as.
+	* @param {string} password - A password for the user account.
+	*/
+
+	async createAccount(identifier: string, name: string, password: string) {
+		const accounts = this.db!.collection('accounts');
+		if (await accounts.findOne({identifier: identifier}) != null) throw "A user with this email address already exists.";
+
+		let pass = await bcrypt.hash(password, 10);
+		await accounts.insertOne({ name: name, identifier: identifier, pass: pass });
 
 		let calc: DB.Calculator = {
-			identifier: "powellriver",
-			city: "Powell River",
-			title: "Powell River",
+			identifier: identifier,
+			city: name,
+			title: name,
 			year: 2020,
 
 			theme: {
-				showTitle: false,
-				hasHeader: true,
+				showTitle: true,
+				hasHeader: "",
 				headerTheme: "navy",
 				backgroundTheme: "dark"
 			},
@@ -87,6 +176,7 @@ export default class Database {
 				name: "65+ or Disabled Grant",
 				value: 1045
 			}],
+
 			defaultGrant: 1,
 
 			insights: {
@@ -95,67 +185,43 @@ export default class Database {
 				previousAvg: 344487
 			}
 		}
-		await this.db.collection('calculators').insertOne(calc);
+		await this.db!.collection('calculators').insertOne(calc);
 	}
 
-	/**
-	* Get Calculator data from the database using
-	* a subdomain as an identifier.
-	*
-	* @param {string} subdomain - The calculator identifier.
-	*/
-
-	async getCalculator(subdomain: string): Promise<DB.Calculator> {
-		const calculators = this.db!.collection('calculators');
-		const calculatorObj: DB.Calculator | null = await calculators.findOne({identifier: subdomain});
-		if (!calculatorObj) throw "This calculator does not exist.";
-
-		return calculatorObj;
-	}
 
 	/**
-	* Updates a calculator using with specified data.
+	* Changes an account's password to the one specified.
 	*
-	* @param {string} subdomain - The calculator identifier.
-	* @param {any} data - The Update object.
+	* @param {string} identifier - The identifier. 
+	* @param {string} password - The new password. 
 	*/
 
-	async updateCalculator(subdomain: string, update: any) {
-		const calculators = this.db!.collection('calculators');
-		await calculators.updateOne({identifier: subdomain}, update);
-	}
-
-	/**
-	* Get a User database object from a user identifier.
-	* Throws if the user doesn't exist.
-	*
-	* @param {string} identifier - The user identifier.
-	*/
-
-	async getAccount(identifier: string): Promise<DB.Account> {
+	async updatePassword(identifier: string, password: string) {
 		const accounts = this.db!.collection('accounts');
-		const accountObj: DB.Account | null = await accounts.findOne({identifier: identifier});
-		if (!accountObj) throw "This user no longer exists.";
-
-		return accountObj;
-	}
-
-
-	/**
-	* Create a user in the database from a user string, a name, and a password.
-	* Throws if another user with the same user string already exists.
-	*
-	* @param {string} identifier - The user identifier in the form of a subdomain.
-	* @param {string} name - A username that the user will be referred to as.
-	* @param {string} password - A password for the user account.
-	*/
-
-	async createAccount(identifier: string, name: string, password: string) {
-		const accounts = this.db!.collection('accounts');
-		if (await accounts.findOne({identifier: identifier}) != null) throw "A user with this email address already exists.";
-
 		let pass = await bcrypt.hash(password, 10);
-		await accounts.insertOne({ name: name, identifier: identifier, pass: pass });
+		await accounts.updateOne({ identifier: identifier }, { $set: { pass: pass }});
+	}
+
+
+	/**
+	* Deletes an account.
+	*
+	* @param {string} identifier - The account to delete.
+	*/
+
+	async deleteAccount(identifier: string) {
+		const accounts = this.db!.collection('accounts');
+		await accounts.deleteOne({ identifier: identifier });
+	}
+
+
+	/**
+	* Lists all of the accounts
+	*/
+
+	async listAccounts() {
+		const accounts = this.db!.collection('accounts');
+		return (await accounts.find({}).toArray()).map((a: DB.Account) => a.identifier);
 	}
 
 
@@ -199,9 +265,11 @@ export default class Database {
 				throw "Auth token is no longer valid, please reload the page.";
 			token = token.cookies.tkn;
 		}
+
 		await this.pruneTokens();
 		let inst: DB.AuthToken | null = await this.db!.collection('tokens').findOne({token: token});
 		if (!inst) throw "Auth token is no longer valid, please reload the page.";
+		
 		return inst.identifier;
 	}
 

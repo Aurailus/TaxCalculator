@@ -1,6 +1,7 @@
 // (c) Nicole Collings 2019-present, all rights reserved.
 /// <reference path="../@types/jquery/JQuery.d.ts"/>
 /// <reference path="../@types/p5/index.d.ts"/>
+/// <reference path="../@types/jscookie.d.ts"/>
 
 let dynamicElements: (NumericInput | DecimalInput)[] = [];
 
@@ -25,3 +26,9 @@ $(window).on("load", () => {
 	//Reflow any elements that may have moved
 	dynamicElements.forEach((v, n) => v.reflow());
 });
+
+function logout() {
+	Cookies.remove("tkn");
+	location.reload();
+
+}

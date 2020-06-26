@@ -1,0 +1,39 @@
+doctype html
+html
+	head
+		meta(http-equiv='Content-Type' content='text/html; charset=utf-8')
+		meta(name='viewport' content='width=device-width, initial-scale=1.0')
+		link(rel='icon' href='/public/favicon.ico')
+
+		link(href='https://fonts.googleapis.com/css?family=Montserrat:400,500|Nunito:300,400,600|Fira+Sans:400i,500i' rel='stylesheet')
+		link(href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet')
+		link(rel='stylesheet' href='/public/calculator/style/build/css/calculator.css')
+		
+		title Admin Panel &nbsp;&bullet;&nbsp; Aurailus Design
+		
+		meta(name='copyright' content='(c) 2019 - present Aurailus Design, All Rights Reserved.')
+		meta(name='description' content='Calculate your estimated taxes online!')
+		meta(name='keywords' content='Tax, Calculator, Residential Tax, Tax Calculator')
+		meta(name='author' content='Aurailus Design')
+		meta(name='robots' content='noindex,nofollow')
+		meta(name='theme-color' content='#333')
+		
+		//- Global site tag (gtag.js) - Google Analytics
+		script(async src='https://www.googletagmanager.com/gtag/js?id=UA-150100799-3')
+		script.
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'UA-150100799-3');
+
+	body#admin
+		main(style="width: 100%;")
+			form(method="POST" enctype="multipart/form-data")
+				.wrap(style="text-align: center;")
+					h2 Upload Image
+					if err
+						div#saved(style="margin-bottom: 12px;")
+							i.material-icons warning
+							| #{err}
+					input(type="file" name="image")
+					button(style="max-width: 200px; margin-left: auto; margin-right: auto;") Upload

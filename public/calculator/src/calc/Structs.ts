@@ -14,7 +14,7 @@ interface CalculatorData {
 
 interface Theme {
 	showTitle: boolean;
-	hasHeader: boolean;
+	hasHeader: string;
 
 	headerTheme: string;
 	backgroundTheme: string;

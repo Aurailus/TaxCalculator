@@ -58,7 +58,7 @@ class DecimalInput {
 		let size = {width: this.element.innerWidth(), height: this.element.innerHeight()};
 
 		this.overlay.css({
-			"top": pos.top + pad - 1.5,
+			"top": pos.top + pad - 1.5 + $("main").scrollTop(),
 			"left": pos.left + pad,
 			"max-width": size.width - pad * 2,
 			"height": size.height - pad * 2 + 2

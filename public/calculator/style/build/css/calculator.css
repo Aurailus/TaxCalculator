@@ -363,6 +363,54 @@ input.decimal:focus + .decimal_overlay .suffix {
         color: #2b387c;
         font-weight: 500; }
 
+body#admin .rate {
+  display: grid;
+  width: 100%;
+  height: auto;
+  margin-bottom: 8px;
+  grid-template-columns: 1fr 1fr 1fr 1fr 42px;
+  grid-template-rows: 42px 20px;
+  grid-gap: 8px; }
+  body#admin .rate input {
+    margin-bottom: 0; }
+  body#admin .rate button {
+    margin: 0;
+    padding: 0;
+    height: 42px; }
+  body#admin .rate input:first-child {
+    grid-column-start: 1;
+    grid-column-end: 3; }
+  body#admin .rate .occupancy {
+    position: relative; }
+    body#admin .rate .occupancy label {
+      text-align: right;
+      margin-right: 24px; }
+    body#admin .rate .occupancy input {
+      position: absolute;
+      top: -1px;
+      right: 0; }
+
+body#admin .grant {
+  display: grid;
+  width: 100%;
+  height: auto;
+  margin-bottom: 8px;
+  grid-template-columns: 1fr 1fr 42px;
+  grid-template-rows: 42px 20px;
+  grid-gap: 8px; }
+  body#admin .grant input {
+    margin-bottom: 0; }
+  body#admin .grant button {
+    margin: 0;
+    padding: 0;
+    height: 42px; }
+  body#admin .grant .default {
+    position: relative; }
+    body#admin .grant .default input {
+      position: absolute;
+      top: -2px;
+      left: 60px; }
+
 body#calculator.light {
   background-color: #fff; }
 

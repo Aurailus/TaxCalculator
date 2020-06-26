@@ -9,6 +9,7 @@ html
 		link(href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet')
 		link(rel='stylesheet' href='/public/calculator/style/build/css/calculator.css')
 
+		script(src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js")
 		script(src="https://code.jquery.com/jquery-3.3.1.min.js")
 		script(src="/public/calculator/admin_script.js")
 		
@@ -47,7 +48,7 @@ html
 				hr
 
 				div
-					a(href='/admin/logout')
+					a(href='javascript:logout();')
 						i.material-icons lock
 						| Log out
 				div
@@ -58,7 +59,7 @@ html
 				hr
 
 				div
-					a(href='/')
+					a(href='/admin/support')
 						i.material-icons help_outline
 						| Support
 
@@ -85,61 +86,77 @@ html
 
 				h2 Tax Rates
 				p The current and previous year's tax rates in your municipality.
-				.col2
-					h2.no_margin #{calc.year}
-					each tax, ind in calc.taxes
-						input(id='tax_name_' + ind  type='hidden' value=tax.name)
-						label(for='tax_current_' + ind) #{tax.name}
-						input(id='tax_current_' + ind  type='decimal' value=tax.values.current)
 
-					button.tax_switch Move Current to Previous
-				.col2
-					h2.no_margin #{calc.year - 1}
+				.taxes_wrap
 					each tax, ind in calc.taxes
-						label(for='tax_previous_' + ind) &nbsp;
-						input(id='tax_previous_' + ind  type='decimal' value=tax.values.previous)
+						.rate
+							input(id='tax_name_' + ind  type='text' value=tax.name)
+							input(id='tax_current_' + ind  type='decimal' value=tax.values.current)
+							input(id='tax_previous_' + ind  type='decimal' value=tax.values.previous)
+							button.remove_tax(ind=ind)
+								i.material-icons close
 
-					p(style='margin-top: 34px; opacity: 0.6;')
-						strong Note:
-						| You will lose the previous
-						br
-						| year's current values.
+				.col2
+					button.tax_new(style="margin-top: 0;")
+						i.material-icons add
+						| Add New Tax
+				.col2
+					button.tax_switch(style="margin-top: 0;") 
+						i.material-icons arrow_right
+						| Move Current to Previous
 
 				h2 Flat Fees
 				p The current and previous year&apos;s flat fees in your municipality.
-				.col2
-					h2.no_margin #{calc.year}
-					each fee, ind in calc.fees
-						input(id='fee_name_' + ind  type='hidden' value=fee.name)
-						label(for='fee_current_' + ind) #{fee.name}
-						input(id='fee_current_' + ind type='numeric' value=fee.values.current)
 
-					button.fee_switch Move Current to Previous
-				.col2
-					h2.no_margin #{calc.year - 1}
+				.fees_wrap
 					each fee, ind in calc.fees
-						label(for='fee_previous_' + ind) &nbsp;
-						input(id='fee_previous_' + ind type='numeric' value=fee.values.previous)
+						.rate
+							input(id='fee_name_' + ind type='text' value=fee.name)
+							input(id='fee_current_' + ind type='numeric' value=fee.values.current)
+							input(id='fee_previous_' + ind type='numeric' value=fee.values.previous)
+							button.remove_fee(ind=ind)
+								i.material-icons close
+							
+							label Apply To: 
+							.occupancy
+								label(for="occ_o_" + ind) Occupied
+								input(id="occ_o_" + ind type='radio' name='occupancy_state_' + ind value='Occupied' checked=fee.requiresOccupancyState)
+							.occupancy
+								label(for="occ_u_" + ind) Unoccupied
+								input(id="occ_u_" + ind type='radio' name='occupancy_state_' + ind value='Unoccupied' checked=fee.requiresOccupancyState !== undefined && !fee.requiresOccupancyState)
+							.occupancy
+								label(for="occ_e_" + ind) Either
+								input(id="occ_e_" + ind type='radio' name='occupancy_state_' + ind value='Either' checked=fee.requiresOccupancyState === undefined)
 
-					p(style='margin-top: 34px; opacity: 0.6;')
-						strong Note:
-						|  You will lose the previous
-						br
-						| year&apos;s current values.
+				.col2
+					button.fee_new(style="margin-top: 0;")
+						i.material-icons add
+						| Add New Fee
+				.col2
+					button.fee_switch(style="margin-top: 0;") 
+						i.material-icons arrow_right
+						| Move Current to Previous
 
 				h2 Grants
 				p The available Homeowner's grants in your municipality.
-				.col2
-					label Name
-					each grant, ind in calc.grants
-						input(id='grant_name_' + ind type='text' value=grant.name)
-					p #{""}
 
-				.col2
-					label Value
+				.grants_wrap
 					each grant, ind in calc.grants
-						input(id='grant_value_' + ind  type='numeric' value=grant.value)
-					p #{""}
+						.grant
+							input(id='grant_name_' + ind type='text' value=grant.name)
+							input(id='grant_value_' + ind type='numeric' value=grant.value)
+							button.remove_grant(ind=ind)
+								i.material-icons close
+							
+							.default
+								label(for="grant_default_" + ind) Default
+								input(id="grant_default_" + ind type='radio' name='grant_default' value=ind checked=calc.defaultGrant==ind)
+				
+				.col2
+					button.grant_new(style="margin-top: 0;")
+						i.material-icons add
+						| Add New Grant
+				.col2
 
 		.save_options_wrap
 			.save_options

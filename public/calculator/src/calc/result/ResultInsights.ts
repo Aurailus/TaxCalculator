@@ -54,7 +54,7 @@ class ResultInsights {
 		}
 
 		lines += `<p><i class="material-icons">${this.level}</i> The average 
-			residential property assessed value increase in ${DATA.title} is <span class='slab'>${DATA.insights.increase}%</slab></p>`;
+			residential property assessed value increase in ${DATA.city} is <span class='slab'>${DATA.insights.increase}%</slab></p>`;
 			
 		lines += `<p><i class="material-icons">${this.info}</i> The average Single Family Dwelling assessment in ${DATA.year} was <span class='slab'><span class='slab'>${formatNum(DATA.insights.currentAvg, 0, "$")}</slab></span>.</p>`;
 		lines += `<p><i class="material-icons">${this.info}</i> The average Single Family Dwelling assessment in ${DATA.year - 1} was <span class='slab'><span class='slab'>${formatNum(DATA.insights.previousAvg, 0, "$")}</slab></span>.</p>`;
